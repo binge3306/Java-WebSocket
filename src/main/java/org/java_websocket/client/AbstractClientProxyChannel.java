@@ -7,6 +7,7 @@ import java.nio.channels.ByteChannel;
 
 import org.java_websocket.AbstractWrappedByteChannel;
 
+
 public abstract class AbstractClientProxyChannel extends AbstractWrappedByteChannel {
 	protected final ByteBuffer proxyHandshake;
 

@@ -4,8 +4,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+/**
+ * 
+ * @author wurunzhou
+ *
+ */
 public class HandshakedataImpl1 implements HandshakeBuilder {
+	
+	// 或许是心跳内容
 	private byte[] content;
+	// 心跳头
 	private TreeMap<String,String> map;
 
 	public HandshakedataImpl1() {

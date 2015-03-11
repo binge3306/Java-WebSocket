@@ -107,6 +107,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		if( writeThread != null )
 			throw new IllegalStateException( "WebSocketClient objects are not reuseable" );
 		writeThread = new Thread( this );
+		// 启动client线程
 		writeThread.start();
 	}
 
@@ -155,6 +156,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		engine.send( data );
 	}
 
+	/**
+	 * 启动client线程
+	 * <br>
+	 * 1. 创建socket连接
+	 * 2. 启动写线程（写线程应该是不停的从写缓存队列中取出数据发送出去）
+	 */
 	public void run() {
 		try {
 			if( socket == null ) {
@@ -209,6 +216,10 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		return port;
 	}
 
+	/**
+	 * 开始发送心跳包
+	 * @throws InvalidHandshakeException
+	 */
 	private void sendHandshake() throws InvalidHandshakeException {
 		String path;
 		String part1 = uri.getPath();

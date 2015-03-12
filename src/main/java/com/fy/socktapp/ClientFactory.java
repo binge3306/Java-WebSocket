@@ -12,16 +12,30 @@ package com.fy.socktapp;
  */
 public class ClientFactory {
 
+	private volatile static WebsocketClientInterface client;
 
+	
 	/**
 	 * 创建连接实体
+	 * 
 	 * @param url
 	 * @param port
 	 * @return
 	 */
 	public static WebsocketClientInterface getClientInstance(String url,
 			int port) {
-		return null;
+		return getClient(url,port);
+	}
+
+	public static  WebsocketClientInterface getClient(String url, int port) {
+		if (client == null) {
+			synchronized (WebsocketClientInterface.class) {
+				if (client == null) {
+					client = new WebsocketClientImp(url, port);
+				}
+			}
+		}
+		return client;
 	}
 	
 	

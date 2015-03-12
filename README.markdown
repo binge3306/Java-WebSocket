@@ -2,11 +2,15 @@
 Java WebSockets
 ===============
 
+
+该项目包含用java写的websocket 服务器和客户端。该项目还实现了Java NIO，能够实现非阻塞事件驱动模型
 This repository contains a barebones WebSocket server and client implementation
 written in 100% Java. The underlying classes are implemented `java.nio`, which allows for a
 non-blocking event-driven model (similar to the
 [WebSocket API](http://dev.w3.org/html5/websockets/) for web browsers).
 
+下面是实现 websocket 协议版本。
+通常Draft17是经常使用的。现在被chrome16+和IE10支持，可能以后其他的浏览器也会添加对该协议的支持。
 Implemented WebSocket protocol versions are:
 
  * [RFC 6455](http://tools.ietf.org/html/rfc6455)
@@ -20,7 +24,10 @@ Implemented WebSocket protocol versions are:
 
 ##Build
 You can build using Ant or Maven but there is nothing against just putting the source path ```src/main/java ``` on your applications buildpath.
-
+你可以使用ant 或者是maven编译
+使用maven
+maven clean compile (install)
+maven eclipse:eclipse
 ###Ant
 
 ``` bash
@@ -48,30 +55,38 @@ Running the Examples
 **Note:** If you're on Windows, then replace the `:` (colon) in the classpath
 in the commands below with a `;` (semicolon).
 
+编译完成之后，可以启动chat server
 After you build the library you can start the chat server (a `WebSocketServer` subclass):
 
 ``` bash
 java -cp build/examples:dist/java_websocket.jar ChatServer
 ```
 
+启动chat server 之后，可以启动一些client来测试
 Now that the server is started, you need to connect some clients. Run the
 Java chat client (a `WebSocketClient` subclass):
 
 ``` bash
 java -cp build/examples:dist/java_websocket.jar ChatClient
 ```
-
+如何是启动java swing GUI 你可以向所有其他的连接发送消息，也可以收到其他客户端发送的消息
 The chat client is a simple Swing GUI application that allows you to send
 messages to all other connected clients, and receive messages from others in a
 text box.
 
+你也可以打开chat.html 页面，如果打开的浏览器 不支持 websocket协议，那么就会调用Flash插件来模拟websocket（模拟器的地址是http://github.com/gimite/web-socket-js）
 In the example folder is also a simple HTML file chat client `chat.html`, which can be opened by any browser. If the browser natively supports the WebSocket API, then it's
 implementation will be used, otherwise it will fall back to a
 [Flash-based WebSocket Implementation](http://github.com/gimite/web-socket-js).
 
 
+下面是如何实现你自己的websocket server
 Writing your own WebSocket Server
 ---------------------------------
+
+org.java_websocket.server.WebSocketServer 这个抽象类实现了server一段的websocket协议。
+websocket server除了通过http建立socket连接，本身不做任何事情。你可以写一个子类，实现你自己的目的。
+
 
 The `org.java_websocket.server.WebSocketServer` abstract class implements the
 server-side of the
@@ -80,6 +95,11 @@ A WebSocket server by itself doesn't do anything except establish socket
 connections though HTTP. After that it's up to **your** subclass to add purpose.
 
 
+
+org.java_websocket.server.WebSocketClient 这是一个连接websocket 客户端的抽象类。
+其构造函数是通过ws 连接到服务器的。
+其`onOpen`, `onClose`, `onMessage` and `onIOError` 将在整个生命周期中，都有效。
+而且必须在你的子类中写具体实现。
 Writing your own WebSocket Client
 ---------------------------------
 
@@ -110,6 +130,8 @@ If you want to use `wss` on the android platfrom you should take a look at [this
 
 I ( @Davidiusdadi ) would be glad if you would give some feedback whether wss is working fine for you or not.
 
+
+软件支持。
 Minimum Required JDK
 --------------------
 

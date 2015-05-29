@@ -31,7 +31,7 @@ public class ClientFactory {
 		if (client == null) {
 			synchronized (WebsocketClientInterface.class) {
 				if (client == null) {
-					client = new WebsocketClientImp(url, port);
+					//client = new WebsocketClientImp(new inurl);
 				}
 			}
 		}

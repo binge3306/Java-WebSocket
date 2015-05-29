@@ -353,6 +353,15 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public void onFragment( Framedata frame ) {
 	}
 
+	/**
+	 * 写线程
+	 * <br>
+	 * 该线程从egine中的输出队列中去待发送数据（ByteBuffer格式）。
+	 * <br>
+	 * 然后将该数据通过socket输出流写出
+	 * @author wurunzhou
+	 *
+	 */
 	private class WebsocketWriteThread implements Runnable {
 		@Override
 		public void run() {

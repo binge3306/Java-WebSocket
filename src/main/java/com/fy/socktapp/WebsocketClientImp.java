@@ -16,9 +16,6 @@ public class WebsocketClientImp extends WebsocketClientAbs {
 		// TODO Auto-generated constructor stub
 	}
 
-	public WebsocketClientImp(String url, int port) {
-		// TODO Auto-generated constructor stub
-	}
 
 	private Socket socket = null;
 	

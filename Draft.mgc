@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
     <Class name="org.java_websocket.drafts.Draft.CloseHandshakeType"
-        x="1010" y="52">
+        x="586" y="52">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -10,7 +10,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.framing.Framedata" x="1182" y="189">
+    <Class name="org.java_websocket.framing.Framedata" x="1024" y="211">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -19,7 +19,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.drafts.Draft_10" x="569" y="418">
+    <Class name="org.java_websocket.drafts.Draft_10" x="145" y="418">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -36,7 +36,7 @@
         <Communication destinationClassName="org.java_websocket.drafts.Draft_10.IncompleteException"/>
         <Communication destinationClassName="org.java_websocket.drafts.Draft"/>
     </Class>
-    <Class name="org.java_websocket.framing.FramedataFysocket" x="1324" y="477">
+    <Class name="org.java_websocket.framing.FramedataFysocket" x="1190" y="412">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -50,7 +50,7 @@
             endpointName="optcode" kind="Simple"/>
         <Communication destinationClassName="org.java_websocket.framing.Framedata"/>
     </Class>
-    <Class name="org.java_websocket.drafts.Draft.HandshakeState" x="683" y="67">
+    <Class name="org.java_websocket.drafts.Draft.HandshakeState" x="259" y="67">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -59,7 +59,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.framing.FrameBuilder" x="1212" y="514">
+    <Class name="org.java_websocket.framing.FrameBuilder" x="1020" y="460">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -69,17 +69,8 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Extension destinationClassName="org.java_websocket.framing.Framedata"/>
     </Class>
-    <Class name="org.java_websocket.framing.Framedata.Opcode" x="1295" y="105">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
     <Class name="org.java_websocket.drafts.Draft_10.IncompleteException"
-        x="996" y="406">
+        x="572" y="406">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -88,7 +79,16 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.drafts.Draft" x="571" y="74">
+    <Class name="org.java_websocket.framing.Framedata.Opcode" x="1149" y="129">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="org.java_websocket.drafts.Draft" x="147" y="74">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>

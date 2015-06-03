@@ -11,9 +11,9 @@ import java.util.TreeMap;
  */
 public class HandshakedataImpl1 implements HandshakeBuilder {
 	
-	// »òĞíÊÇĞÄÌøÄÚÈİ
+	// æˆ–è®¸æ˜¯å¿ƒè·³å†…å®¹
 	private byte[] content;
-	// ĞÄÌøÍ·
+	// å¿ƒè·³å¤´
 	private TreeMap<String,String> map;
 
 	public HandshakedataImpl1() {

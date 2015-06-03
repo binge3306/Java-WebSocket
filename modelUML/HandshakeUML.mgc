@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="org.java_websocket.handshake.ServerHandshake" x="-148" y="99">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.Handshakedata"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.HandshakeImpl1Client"
+        x="381" y="434">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.HandshakedataImpl1"/>
+        <Extension destinationClassName="org.java_websocket.handshake.ClientHandshakeBuilder"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.HandshakedataImpl1" x="54" y="452">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.HandshakeBuilder"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.ClientHandshake" x="387" y="87">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.Handshakedata"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.ServerHandshakeBuilder"
+        x="-184" y="273">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.ServerHandshake"/>
+        <Extension destinationClassName="org.java_websocket.handshake.HandshakeBuilder"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.HandshakeImpl1Server"
+        x="-182" y="430">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.HandshakedataImpl1"/>
+        <Extension destinationClassName="org.java_websocket.handshake.ServerHandshakeBuilder"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.Handshakedata" x="49" y="87">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.HandshakeBuilder" x="97" y="279">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.Handshakedata"/>
+    </Class>
+    <Class name="org.java_websocket.handshake.ClientHandshakeBuilder"
+        x="372" y="273">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.handshake.ClientHandshake"/>
+        <Extension destinationClassName="org.java_websocket.handshake.HandshakeBuilder"/>
+    </Class>
+</ClassDiagram>

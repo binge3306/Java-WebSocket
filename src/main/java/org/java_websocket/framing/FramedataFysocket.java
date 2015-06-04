@@ -14,6 +14,8 @@ public class FramedataFysocket implements FrameBuilder {
 	private ByteBuffer unmaskedpayload;
 	protected boolean transferemasked;
 
+	private ByteBuffer verifyload;
+	
 	public FramedataFysocket() {
 	}
 
@@ -71,6 +73,21 @@ public class FramedataFysocket implements FrameBuilder {
 	@Override
 	public void setTransferemasked( boolean transferemasked ) {
 		this.transferemasked = transferemasked;
+	}
+
+	
+	/**
+	 * @return the verifyload
+	 */
+	public ByteBuffer getVerifyload() {
+		return verifyload;
+	}
+
+	/**
+	 * @param verifyload the verifyload to set
+	 */
+	public void setVerifyload(ByteBuffer verifyload) {
+		this.verifyload = verifyload;
 	}
 
 	@Override

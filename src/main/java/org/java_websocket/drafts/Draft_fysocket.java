@@ -27,6 +27,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.handshake.ServerHandshakeBuilder;
 import org.java_websocket.util.Base64;
 import org.java_websocket.util.Charsetfunctions;
+import org.java_websocket.verify.ClientVerify;
+import org.java_websocket.verify.ServerVerify;
 
 public class Draft_fysocket extends Draft {
 
@@ -93,6 +95,16 @@ public class Draft_fysocket extends Draft {
 		if( v == 7 || v == 8 )// g
 			return basicAccept( handshakedata ) ? HandshakeState.MATCHED : HandshakeState.NOT_MATCHED;
 		return HandshakeState.NOT_MATCHED;
+	}
+	
+	public VerifyState acceptVerifyClient(ClientVerify request,ServerVerify reponse){
+		
+		return VerifyState.NOT_VMATCHED; 
+	}
+	
+	public VerifyState acceptVerifyServer(ClientVerify verifydata){
+		
+		return VerifyState.VMATCHED;
 	}
 
 	@Override

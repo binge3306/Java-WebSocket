@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
-    <Class name="org.java_websocket.handshake.HandshakeImpl1Client"
-        x="381" y="434">
+    <Class name="org.java_websocket.verify.ServerVerifyBuilder" x="98" y="264">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -9,40 +8,10 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.HandshakedataImpl1"/>
-        <Extension destinationClassName="org.java_websocket.handshake.ClientHandshakeBuilder"/>
+        <Extension destinationClassName="org.java_websocket.verify.ServerVerify"/>
+        <Extension destinationClassName="org.java_websocket.verify.VerifyBuilder"/>
     </Class>
-    <Class name="org.java_websocket.handshake.ServerHandshake" x="-162" y="58">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.Handshakedata"/>
-    </Class>
-    <Class name="org.java_websocket.handshake.HandshakedataImpl1" x="62" y="380">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.HandshakeBuilder"/>
-    </Class>
-    <Class name="org.java_websocket.handshake.ClientHandshake" x="421" y="47">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.Handshakedata"/>
-    </Class>
-    <Class name="org.java_websocket.handshake.Handshakedata" x="41" y="21">
+    <Class name="org.java_websocket.verify.Verifydata" x="291" y="95">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -51,8 +20,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.handshake.HandshakeImpl1Server"
-        x="-169" y="409">
+    <Class name="org.java_websocket.verify.VerifydataImpl1" x="292" y="368">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -60,11 +28,9 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.HandshakedataImpl1"/>
-        <Extension destinationClassName="org.java_websocket.handshake.ServerHandshakeBuilder"/>
+        <Extension destinationClassName="org.java_websocket.verify.VerifyBuilder"/>
     </Class>
-    <Class name="org.java_websocket.handshake.ServerHandshakeBuilder"
-        x="-171" y="223">
+    <Class name="org.java_websocket.verify.ServerVerify" x="113" y="113">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -72,11 +38,9 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.ServerHandshake"/>
-        <Extension destinationClassName="org.java_websocket.handshake.HandshakeBuilder"/>
+        <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
     </Class>
-    <Class name="org.java_websocket.handshake.ClientHandshakeBuilder"
-        x="414" y="230">
+    <Class name="org.java_websocket.verify.ClientVerifyBuilder" x="638" y="253">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -84,10 +48,10 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.ClientHandshake"/>
-        <Extension destinationClassName="org.java_websocket.handshake.HandshakeBuilder"/>
+        <Extension destinationClassName="org.java_websocket.verify.ClientVerify"/>
+        <Extension destinationClassName="org.java_websocket.verify.VerifyBuilder"/>
     </Class>
-    <Class name="org.java_websocket.handshake.HandshakeBuilder" x="90" y="207">
+    <Class name="org.java_websocket.verify.VerifyImplServer" x="91" y="390">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -95,6 +59,38 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.handshake.Handshakedata"/>
+        <Extension destinationClassName="org.java_websocket.verify.ServerVerifyBuilder"/>
+        <Extension destinationClassName="org.java_websocket.verify.VerifydataImpl1"/>
+    </Class>
+    <Class name="org.java_websocket.verify.ClientVerify" x="662" y="107">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
+    </Class>
+    <Class name="org.java_websocket.verify.VerifyBuilder" x="323" y="251">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
+    </Class>
+    <Class name="org.java_websocket.verify.VerifyImplClient" x="637" y="397">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.verify.VerifydataImpl1"/>
+        <Extension destinationClassName="org.java_websocket.verify.ClientVerifyBuilder"/>
     </Class>
 </ClassDiagram>

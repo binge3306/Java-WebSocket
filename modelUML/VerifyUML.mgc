@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
-    <Class name="org.java_websocket.verify.ServerVerifyBuilder" x="98" y="264">
+    <Class name="org.java_websocket.verify.Verifydata" x="291" y="87">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="org.java_websocket.verify.ServerVerifyBuilder" x="101" y="253">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -11,16 +20,7 @@
         <Extension destinationClassName="org.java_websocket.verify.ServerVerify"/>
         <Extension destinationClassName="org.java_websocket.verify.VerifyBuilder"/>
     </Class>
-    <Class name="org.java_websocket.verify.Verifydata" x="291" y="95">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="org.java_websocket.verify.VerifydataImpl1" x="292" y="368">
+    <Class name="org.java_websocket.verify.VerifydataImpl1" x="301" y="368">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -40,7 +40,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
     </Class>
-    <Class name="org.java_websocket.verify.ClientVerifyBuilder" x="638" y="253">
+    <Class name="org.java_websocket.verify.ClientVerifyBuilder" x="644" y="253">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -51,7 +51,17 @@
         <Extension destinationClassName="org.java_websocket.verify.ClientVerify"/>
         <Extension destinationClassName="org.java_websocket.verify.VerifyBuilder"/>
     </Class>
-    <Class name="org.java_websocket.verify.VerifyImplServer" x="91" y="390">
+    <Class name="org.java_websocket.verify.ClientVerify" x="662" y="97">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
+    </Class>
+    <Class name="org.java_websocket.verify.VerifyImplServer" x="79" y="390">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -62,7 +72,7 @@
         <Extension destinationClassName="org.java_websocket.verify.ServerVerifyBuilder"/>
         <Extension destinationClassName="org.java_websocket.verify.VerifydataImpl1"/>
     </Class>
-    <Class name="org.java_websocket.verify.ClientVerify" x="662" y="107">
+    <Class name="org.java_websocket.verify.VerifyBuilder" x="336" y="250">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -72,17 +82,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
     </Class>
-    <Class name="org.java_websocket.verify.VerifyBuilder" x="323" y="251">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.verify.Verifydata"/>
-    </Class>
-    <Class name="org.java_websocket.verify.VerifyImplClient" x="637" y="397">
+    <Class name="org.java_websocket.verify.VerifyImplClient" x="634" y="406">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>

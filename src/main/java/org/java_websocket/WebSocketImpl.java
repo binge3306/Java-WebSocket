@@ -563,6 +563,18 @@ public class WebSocketImpl implements WebSocket {
 		send( draft.createFrames( bytes, role == Role.CLIENT ) );
 	}
 
+	// wurunzhou add at 20150608 for heart begin
+	
+	public void sendPing() {
+		send(draft.createPingFrames(ByteBuffer.wrap("ping".getBytes())));
+	}
+
+
+	public void sendPong() {
+		
+	}
+	// wurunzhou add at 20150608 for heart end 
+	
 	@Override
 	public void send( byte[] bytes ) throws IllegalArgumentException , WebsocketNotConnectedException {
 		send( ByteBuffer.wrap( bytes ) );
@@ -575,6 +587,7 @@ public class WebSocketImpl implements WebSocket {
 			sendFrame( f );
 		}
 	}
+	
 
 	@Override
 	public void sendFragmentedFrame( Opcode op, ByteBuffer buffer, boolean fin ) {
@@ -733,5 +746,7 @@ public class WebSocketImpl implements WebSocket {
 	public String getResourceDescriptor() {
 		return resourceDescriptor;
 	}
+
+
 
 }

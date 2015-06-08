@@ -145,6 +145,15 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public void send( String text ) throws NotYetConnectedException {
 		engine.send( text );
 	}
+	/**
+	 * wurunzhou add at 20150608
+	 * <br>
+	 * for heart
+	 * @throws NotYetConnectedException
+	 */
+	public void sendPing() throws NotYetConnectedException{
+		engine.sendPing();
+	}
 
 	/**
 	 * Sends binary <var> data</var> to the connected webSocket server.

@@ -98,6 +98,37 @@ public class Draft_75 extends Draft {
 		frame.setTransferemasked( mask );
 		return Collections.singletonList( (Framedata) frame );
 	}
+	
+
+	@Override
+	public Framedata createPingFrames(ByteBuffer binadata) {
+
+		FrameBuilder curframe = new FramedataImpl1();
+		try {
+			curframe.setPayload( binadata );
+		} catch ( InvalidDataException e ) {
+			throw new NotSendableException( e );
+		}
+		curframe.setFin( true );
+		curframe.setOptcode( Opcode.PING );
+		curframe.setTransferemasked( false );
+		return curframe;
+	}
+
+	@Override
+	public Framedata createPongFrames(ByteBuffer binadata) {
+
+		FrameBuilder curframe = new FramedataImpl1();
+		try {
+			curframe.setPayload( binadata );
+		} catch ( InvalidDataException e ) {
+			throw new NotSendableException( e );
+		}
+		curframe.setFin( true );
+		curframe.setOptcode( Opcode.PONG );
+		curframe.setTransferemasked( false );
+		return curframe;
+	}
 
 	@Override
 	public ClientHandshakeBuilder postProcessHandshakeRequestAsClient( ClientHandshakeBuilder request ) throws InvalidHandshakeException {

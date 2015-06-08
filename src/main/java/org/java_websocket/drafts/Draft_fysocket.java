@@ -175,6 +175,36 @@ public class Draft_fysocket extends Draft {
 		return Collections.singletonList( (Framedata) curframe );
 	}
 
+	@Override
+	public Framedata createPingFrames(ByteBuffer binadata) {
+
+		FrameBuilder curframe = new FramedataImpl1();
+		try {
+			curframe.setPayload( binadata );
+		} catch ( InvalidDataException e ) {
+			throw new NotSendableException( e );
+		}
+		curframe.setFin( true );
+		curframe.setOptcode( Opcode.PING );
+		curframe.setTransferemasked( false );
+		return curframe;
+	}
+
+	@Override
+	public Framedata createPongFrames(ByteBuffer binadata) {
+
+		FrameBuilder curframe = new FramedataImpl1();
+		try {
+			curframe.setPayload( binadata );
+		} catch ( InvalidDataException e ) {
+			throw new NotSendableException( e );
+		}
+		curframe.setFin( true );
+		curframe.setOptcode( Opcode.PONG );
+		curframe.setTransferemasked( false );
+		return curframe;
+	}
+	
 	private byte fromOpcode( Opcode opcode ) {
 		if( opcode == Opcode.CONTINUOUS )
 			return 0;

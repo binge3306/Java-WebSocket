@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.java-websocket</groupId>
     <artifactId>java-WebSocket</artifactId>
-    <version>2.0.2</version><!-- 为fy 新编译版本 -->
+    <version>2.0.3</version><!-- 为fy 新编译版本 -->
     <packaging>jar</packaging>
     <name>Java WebSocket</name>
     <url>http://java-websocket.org/</url>

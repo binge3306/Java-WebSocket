@@ -107,7 +107,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		if( writeThread != null )
 			throw new IllegalStateException( "WebSocketClient objects are not reuseable" );
 		writeThread = new Thread( this );
-		// Æô¶¯clientÏß³Ì
+		// å¯åŠ¨clientçº¿ç¨‹
 		writeThread.start();
 	}
 
@@ -157,10 +157,10 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	}
 
 	/**
-	 * Æô¶¯clientÏß³Ì
+	 * å¯åŠ¨clientçº¿ç¨‹
 	 * <br>
-	 * 1. ´´½¨socketÁ¬½Ó
-	 * 2. Æô¶¯Ğ´Ïß³Ì£¨Ğ´Ïß³ÌÓ¦¸ÃÊÇ²»Í£µÄ´ÓĞ´»º´æ¶ÓÁĞÖĞÈ¡³öÊı¾İ·¢ËÍ³öÈ¥£©
+	 * 1. åˆ›å»ºsocketè¿æ¥
+	 * 2. å¯åŠ¨å†™çº¿ç¨‹ï¼ˆå†™çº¿ç¨‹åº”è¯¥æ˜¯ä¸åœçš„ä»å†™ç¼“å­˜é˜Ÿåˆ—ä¸­å–å‡ºæ•°æ®å‘é€å‡ºå»ï¼‰
 	 */
 	public void run() {
 		try {
@@ -217,7 +217,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	}
 
 	/**
-	 * ¿ªÊ¼·¢ËÍĞÄÌø°ü
+	 * å¼€å§‹å‘é€å¿ƒè·³åŒ…
 	 * @throws InvalidHandshakeException
 	 */
 	private void sendHandshake() throws InvalidHandshakeException {
@@ -354,11 +354,11 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	}
 
 	/**
-	 * Ğ´Ïß³Ì
+	 * å†™çº¿ç¨‹
 	 * <br>
-	 * ¸ÃÏß³Ì´ÓegineÖĞµÄÊä³ö¶ÓÁĞÖĞÈ¥´ı·¢ËÍÊı¾İ£¨ByteBuffer¸ñÊ½£©¡£
+	 * è¯¥çº¿ç¨‹ä»egineä¸­çš„è¾“å‡ºé˜Ÿåˆ—ä¸­å»å¾…å‘é€æ•°æ®ï¼ˆByteBufferæ ¼å¼ï¼‰ã€‚
 	 * <br>
-	 * È»ºó½«¸ÃÊı¾İÍ¨¹ısocketÊä³öÁ÷Ğ´³ö
+	 * ç„¶åå°†è¯¥æ•°æ®é€šè¿‡socketè¾“å‡ºæµå†™å‡º
 	 * @author wurunzhou
 	 *
 	 */

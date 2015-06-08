@@ -362,6 +362,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public void onFragment( Framedata frame ) {
 	}
 
+
 	/**
 	 * 写线程
 	 * <br>

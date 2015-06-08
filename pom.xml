@@ -47,11 +47,11 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+<!--             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
-                <!-- -encoding gbk -charset gbk -->
+                -encoding gbk -charset gbk
 					<configuration> 
                         <source>1.6</source> 
                         <target>1.6</target> 
@@ -66,7 +66,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
     <developers>

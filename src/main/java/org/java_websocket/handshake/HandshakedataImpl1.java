@@ -11,6 +11,7 @@ import java.util.TreeMap;
  */
 public class HandshakedataImpl1 implements HandshakeBuilder {
 	
+
 	// 或许是心跳内容
 	private byte[] content;
 	// 心跳头

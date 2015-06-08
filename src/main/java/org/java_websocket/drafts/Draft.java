@@ -128,9 +128,9 @@ public abstract class Draft {
 
 	public abstract List<Framedata> createFrames( String text, boolean mask );
 	
-	public abstract Framedata createPingFrames(ByteBuffer binadata);
+	public abstract List<Framedata> createPingFrames(ByteBuffer binadata);
 	
-	public abstract Framedata createPongFrames(ByteBuffer binadata);
+	public abstract List<Framedata> createPongFrames(ByteBuffer binadata);
 
 	public List<Framedata> continuousFrame( Opcode op, ByteBuffer buffer, boolean fin ) {
 		if( op != Opcode.BINARY && op != Opcode.TEXT && op != Opcode.TEXT ) {

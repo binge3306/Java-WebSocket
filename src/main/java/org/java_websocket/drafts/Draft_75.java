@@ -101,7 +101,7 @@ public class Draft_75 extends Draft {
 	
 
 	@Override
-	public Framedata createPingFrames(ByteBuffer binadata) {
+	public List<Framedata> createPingFrames(ByteBuffer binadata) {
 
 		FrameBuilder curframe = new FramedataImpl1();
 		try {
@@ -112,11 +112,11 @@ public class Draft_75 extends Draft {
 		curframe.setFin( true );
 		curframe.setOptcode( Opcode.PING );
 		curframe.setTransferemasked( false );
-		return curframe;
+		return Collections.singletonList( (Framedata) curframe );
 	}
 
 	@Override
-	public Framedata createPongFrames(ByteBuffer binadata) {
+	public List<Framedata> createPongFrames(ByteBuffer binadata) {
 
 		FrameBuilder curframe = new FramedataImpl1();
 		try {
@@ -127,7 +127,7 @@ public class Draft_75 extends Draft {
 		curframe.setFin( true );
 		curframe.setOptcode( Opcode.PONG );
 		curframe.setTransferemasked( false );
-		return curframe;
+		return Collections.singletonList( (Framedata) curframe );
 	}
 
 	@Override

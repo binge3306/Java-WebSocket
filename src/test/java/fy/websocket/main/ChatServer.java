@@ -97,4 +97,10 @@ public class ChatServer extends WebSocketServer {
 			}
 		}
 	}
+
+	@Override
+	public void onWebsocketPong(WebSocket conn, Framedata f) {
+		// TODO Auto-generated method stub
+		
+	}
 }

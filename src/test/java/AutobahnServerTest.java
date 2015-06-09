@@ -69,4 +69,10 @@ public class AutobahnServerTest extends WebSocketServer {
 		new AutobahnServerTest( port, new Draft_17() ).start();
 	}
 
+	@Override
+	public void onWebsocketPong(WebSocket conn, Framedata f) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

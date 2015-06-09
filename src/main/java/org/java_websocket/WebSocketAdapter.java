@@ -69,8 +69,7 @@ public abstract class WebSocketAdapter implements WebSocketListener {
 	 * @see @see org.java_websocket.WebSocketListener#onWebsocketPong(WebSocket, Framedata)
 	 */
 	@Override
-	public void onWebsocketPong( WebSocket conn, Framedata f ) {
-	}
+	public abstract void onWebsocketPong( WebSocket conn, Framedata f ) ;
 
 	/**
 	 * Gets the XML string that should be returned if a client requests a Flash

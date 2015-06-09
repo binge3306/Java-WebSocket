@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.NotYetConnectedException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -198,6 +200,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 		try {
 			while ( !isClosed() && ( readBytes = istream.read( rawbuffer ) ) != -1 ) {
+				// 不断读取服务器消息
 				engine.decode( ByteBuffer.wrap( rawbuffer, 0, readBytes ) );
 			}
 			engine.eot();
@@ -226,7 +229,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	}
 
 	/**
-	 * 开始发送心跳包
+	 * 发送握手
 	 * @throws InvalidHandshakeException
 	 */
 	private void sendHandshake() throws InvalidHandshakeException {
@@ -311,6 +314,15 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	@Override
 	public final void onWebsocketError( WebSocket conn, Exception ex ) {
 		onError( ex );
+	}
+
+	
+	@Override
+	public void onWebsocketPong(WebSocket conn, Framedata f) {
+		Date currentTime = new Date();
+		SimpleDateFormat dateString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		System.out.println("onWebsocketPong"+dateString.format(currentTime));
 	}
 
 	@Override

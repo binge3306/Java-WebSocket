@@ -348,6 +348,7 @@ public class WebSocketImpl implements WebSocket {
 					wsl.onWebsocketPing( this, f );
 					continue;
 				} else if( curop == Opcode.PONG ) {
+					// 收到pong回复
 					wsl.onWebsocketPong( this, f );
 					continue;
 				} else if( !fin || curop == Opcode.CONTINUOUS ) {

@@ -11,6 +11,7 @@ import org.java_websocket.handshake.Handshakedata;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.handshake.ServerHandshakeBuilder;
 
+
 /**
  * Implemented by <tt>WebSocketClient</tt> and <tt>WebSocketServer</tt>.
  * The methods within are called by <tt>WebSocket</tt>.

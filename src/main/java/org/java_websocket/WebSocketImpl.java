@@ -345,6 +345,7 @@ public class WebSocketImpl implements WebSocket {
 					}
 					continue;
 				} else if( curop == Opcode.PING ) {
+					
 					wsl.onWebsocketPing( this, f );
 					continue;
 				} else if( curop == Opcode.PONG ) {
@@ -564,17 +565,28 @@ public class WebSocketImpl implements WebSocket {
 		send( draft.createFrames( bytes, role == Role.CLIENT ) );
 	}
 
-	// wurunzhou add at 20150608 for heart begin
-	
-	public void sendPing() {
-		send(draft.createPingFrames(ByteBuffer.wrap("ping".getBytes())));
+	// wurunzhou add at 20150608 for heartbeat begin
+	/**
+	 * 
+	 * @return 1 表示心跳添加成功，0表示发送队列不为空
+	 */
+	public int sendPing() {
+		if(outQueue.isEmpty()||outQueue.size()<=0){
+			// 发送队列为空 将心跳添加到发送队列
+			send(draft.createPingFrames(ByteBuffer.wrap("ping".getBytes())));
+			return 1;
+		}else{
+			// 提醒线程休眠五秒
+			return 0;
+		}
+		
 	}
 
 
 	public void sendPong() {
 		
 	}
-	// wurunzhou add at 20150608 for heart end 
+	// wurunzhou add at 20150608 for heartbeat end 
 	
 	@Override
 	public void send( byte[] bytes ) throws IllegalArgumentException , WebsocketNotConnectedException {

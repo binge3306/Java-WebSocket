@@ -1,6 +1,5 @@
 package org.java_websocket.util;
 
-
 /**
  * @author Bryan-zhou
  * @date 2015年6月11日上午11:01:22

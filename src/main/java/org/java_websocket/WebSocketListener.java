@@ -18,6 +18,7 @@ import org.java_websocket.handshake.ServerHandshakeBuilder;
  */
 public interface WebSocketListener {
 
+	
 	/**
 	 * Called on the server side when the socket connection is first established, and the WebSocket
 	 * handshake has been received. This method allows to deny connections based on the received handshake.<br>

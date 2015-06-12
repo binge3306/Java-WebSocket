@@ -122,12 +122,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * Initiates the websocket connection. This method does not block.
 	 */
 	public void connect(int heartbeat_) {
-		if( writeThread != null )
-			throw new IllegalStateException( "WebSocketClient objects are not reuseable" );
-		writeThread = new Thread( this );
-		// 启动client线程
-		writeThread.start();
-
+		
 		// wurunzhou add  at 20150612 for 初始化心跳参数  begin
 		if( heartbeat_ == 0){
 			heartbeat = false;
@@ -143,6 +138,13 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			heartbeat = false;
 		}
 		//  wurunzhou add  at 20150612 for 初始化心跳参数  end 
+		if( writeThread != null )
+			throw new IllegalStateException( "WebSocketClient objects are not reuseable" );
+		writeThread = new Thread( this );
+		// 启动client线程
+		writeThread.start();
+
+
 	}
 
 	/**
@@ -478,15 +480,18 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 		@Override
 		public void run() {
+			System.out.println("启动heartbeat send Thread ");
 			boolean pass = true;
-			if(heartbeat){
+			if(!heartbeat){
 				// 在这里waite
 				// object.w
 				return ;
 			}
+			System.out.println("开始发送心跳");
 			int checkExceptionTimes = 0;
 			while(pass){
 				try {
+					
 					// 获得当前时间
 					Date currentTime = new Date();
 					// 当前时间和最近一次发送心跳时间比较

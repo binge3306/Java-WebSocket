@@ -13,7 +13,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.java-websocket</groupId>
     <artifactId>java-WebSocket</artifactId>
-    <version>2.0.3</version><!-- 为fy 新编译版本 -->
+    <version>2.0.4</version><!-- 为fy 新编译版本 -->
+    <!--  因为添加了心跳验证连接是否失效 将版本提升到2.0.4 -->
     <packaging>jar</packaging>
     <name>Java WebSocket</name>
     <url>http://java-websocket.org/</url>

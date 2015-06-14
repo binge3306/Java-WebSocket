@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketAdapter;
@@ -65,15 +67,20 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	
 	// wurunzhou add prameters at 20150611 for heartbeat begin
 	// 最近ping 执行时间
-	private Date pingNearstTime;
+	private Date pingNeartTime;
+
 	// 最近pong 接收时间
 	private Date pongNeartTime;
 	// 记录ping 执行次数
 	private AtomicInteger pingTimes = new AtomicInteger(0);
+	// 用来标记是否抛出接收应答异常
+	private AtomicInteger PongExceptionTrue = new AtomicInteger(0);
 	// 是否执行心跳
 	private boolean heartbeat = "1".equals(WebsocketConstant.HeartbeatTrue.getParameter())?true:false;
 	// 心跳执行周期
 	private int heartbeatCycle = Integer.parseInt(WebsocketConstant.HearbeatCycle.getParameter());
+	// 准备用来锁定变量
+	private Lock lock =  new ReentrantLock();
 	// wurunzhou add prameters at 20150611 for heartbeat end
 
 	/** This open a websocket connection as specified by rfc6455 */
@@ -242,13 +249,11 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		writeThread = new Thread( new WebsocketWriteThread() );
 		writeThread.start();
 
-		// wurunzhou add code at 20150611 for init hearbeat premeter begin
-		pingNearstTime = new Date();
-		pongNeartTime = pingNearstTime;
-		// wurunzhou add code at 20150611 for init hearbeat premeter end
-		
 		// wurunzhou add at 20150611 for start heartbeat thread
 		new Thread(new HeartbeatSendThread()).start();
+		// wurunzhou add at 20150611 for start heartbeat pong receive thread
+		new Thread(new HeartbeatReceiveThread()).start();
+		// wurunzhou add at 20150612 end
 		
 		byte[] rawbuffer = new byte[ WebSocketImpl.RCVBUF ];
 		int readBytes;
@@ -345,7 +350,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	@Override
 	public void onWebsocketPing1() {
 		System.out.println("onWebsocketPing1 执行");
+		//lock.lock();
 		pongNeartTime = new Date();
+		//lock.unlock();
 		pingTimes.set(0);
 	}
 
@@ -470,6 +477,42 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			}
 		}
 	}
+	/**
+	 * recevie 接受心跳应答控制
+	 * @author wusir
+	 *
+	 */
+	private class HeartbeatReceiveThread implements Runnable{
+
+		@Override
+		public void run() {
+			
+			boolean pass = true;
+			
+			while(pass){
+				
+				try {
+					TimeUnit.SECONDS.sleep(120);
+				} catch (InterruptedException e) {
+					pass = false;
+				}
+				// 休眠2分钟 判断 最近一次接收pong应答的时间与当前时间差
+				Date currentTime = new Date();
+				int devision = (int) (currentTime.getTime() - pongNeartTime
+						.getTime()) / 1000;
+				// 如果当前时间和上次接受pong应答时间
+				if(devision < Integer.parseInt(WebsocketConstant.HeartbeatPongCycle.getParameter())){
+					// 小于 定义的 抛出异常上限时间 继续休眠等待
+				}else{
+					// 否则 抛出异常，结束线程。
+					PongExceptionTrue.addAndGet(1);
+					pass = false;
+				}
+			}
+		}
+		
+	}
+	
 	
 	/**
 	 * 周期发送心跳线程
@@ -478,6 +521,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 */
 	private class HeartbeatSendThread implements Runnable{
 
+		public HeartbeatSendThread(){
+			// wurunzhou add code at 20150611 for init hearbeat premeter begin
+			pingNeartTime = new Date();
+			pongNeartTime = pingNeartTime;
+			// wurunzhou add code at 20150611 for init hearbeat premeter end
+		}
 		@Override
 		public void run() {
 			System.out.println("启动heartbeat send Thread ");
@@ -495,7 +544,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 					// 获得当前时间
 					Date currentTime = new Date();
 					// 当前时间和最近一次发送心跳时间比较
-					int devision = (int) (currentTime.getTime() - pingNearstTime
+					int devision = (int) (currentTime.getTime() - pingNeartTime
 							.getTime()) / 1000;
 					// 是否满足发送周期 否则休眠五秒
 					if (devision < Integer.parseInt(WebsocketConstant.HearbeatCycle
@@ -511,7 +560,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 							// 发送队列为空，插入心跳成功
 
 							// 更新ping发送时间,ping次数+1
-							pingNearstTime = new Date();
+							pingNeartTime = new Date();
 							// ping 次数是否超过10次
 							if (pingTimes.getAndIncrement() < Integer
 									.parseInt(WebsocketConstant.PingConfine
@@ -544,9 +593,10 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				
 			}
 
-			// 心跳判断连接失效
+			// 心跳判断连接失效 不再发送ping 心跳
 			// 启动重连
 
+			
 		}
 		
 	}
@@ -562,7 +612,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * @return 为真表示有异常，否则表示没有异常。
 	 */
 	public boolean  checkException() {
-		
+		// 如果还是为0 表示没有异常
+		if(PongExceptionTrue.get() == 0){
+			return true;	
+		}else{
+			// 否则表示有接收应答异常
+		}
 		return false;
 	}
 

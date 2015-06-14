@@ -6,6 +6,9 @@ package org.java_websocket.util;
  **/
 public enum WebsocketConstant {
 
+	// 接收pong应答时间间隔超过2分钟认为可以跑出接收应答异常。
+	HeartbeatPongCycle("120"),
+	
 	HeartbeatTrue("1"),
 	
 	PingConfine("10"),

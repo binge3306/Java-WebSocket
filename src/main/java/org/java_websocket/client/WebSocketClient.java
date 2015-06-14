@@ -24,6 +24,7 @@ import org.java_websocket.WebSocketImpl;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
 import org.java_websocket.exceptions.InvalidHandshakeException;
+import org.java_websocket.exceptions.WebsocketPongResponseException;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.framing.Framedata.Opcode;
@@ -80,7 +81,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	// 心跳执行周期
 	private int heartbeatCycle = Integer.parseInt(WebsocketConstant.HearbeatCycle.getParameter());
 	// 准备用来锁定变量
-	private Lock lock =  new ReentrantLock();
+	//private Lock lock =  new ReentrantLock();
 	// wurunzhou add prameters at 20150611 for heartbeat end
 
 	/** This open a websocket connection as specified by rfc6455 */
@@ -596,7 +597,8 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			// 心跳判断连接失效 不再发送ping 心跳
 			// 启动重连
 
-			
+			//onWebsocketError(conn,);
+			onError(new WebsocketPongResponseException());
 		}
 		
 	}

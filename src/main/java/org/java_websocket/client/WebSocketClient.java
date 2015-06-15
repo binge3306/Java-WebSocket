@@ -533,6 +533,11 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		}
 		@Override
 		public void run() {
+			try {
+				TimeUnit.SECONDS.sleep(5);
+			} catch (InterruptedException e1) {
+
+			}
 			System.out.println("启动heartbeat send Thread ");
 			boolean pass = true;
 			if(!heartbeat){

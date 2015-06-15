@@ -6,15 +6,29 @@ package org.java_websocket.util;
  **/
 public enum WebsocketConstant {
 
-	// 接收pong应答时间间隔超过2分钟认为可以跑出接收应答异常。
+	/**
+	 *  接收pong应答时间间隔超过2分钟认为可以跑出接收应答异常。
+	 */
 	HeartbeatPongCycle("120"),
 	
+	/**
+	 * 默认是否使用心跳（1表示使用）
+	 */
 	HeartbeatTrue("1"),
 	
+	/**
+	 * 允许发送ping次数的上限(10次）
+	 */
 	PingConfine("10"),
 	
+	/**
+	 *  每60秒发送一次心跳(老师说要设置为5到10分钟，但是为了测试目前保持1分钟)
+	 **/
 	HearbeatCycle("60"),
 	
+	/**
+	 * 如果没有达到发送心跳时间，休眠5秒
+	 */
 	SleepTime("5");
 	
 	private String parameter;

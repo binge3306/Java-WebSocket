@@ -126,6 +126,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		return draft;
 	}
 
+	public void connect(){
+		connect(1);
+	}
 	/**
 	 * Initiates the websocket connection. This method does not block.
 	 */

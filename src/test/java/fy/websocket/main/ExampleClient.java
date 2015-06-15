@@ -51,7 +51,7 @@ public class ExampleClient extends WebSocketClient {
 		ExampleClient c = new ExampleClient( new URI( "ws://localhost:8887" ), new Draft_10() ); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
 		c.connect();
 		c.send("");
-		c.sendPing();
+		//c.sendPing();
 	}
 
 }

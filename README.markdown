@@ -3,14 +3,14 @@ Java WebSockets
 ===============
 
 
-¸ÃÏîÄ¿°üº¬ÓÃjavaĞ´µÄwebsocket ·şÎñÆ÷ºÍ¿Í»§¶Ë¡£¸ÃÏîÄ¿»¹ÊµÏÖÁËJava NIO£¬ÄÜ¹»ÊµÏÖ·Ç×èÈûÊÂ¼şÇı¶¯Ä£ĞÍ
+è¯¥é¡¹ç›®åŒ…å«ç”¨javaå†™çš„websocket æœåŠ¡å™¨å’Œå®¢æˆ·ç«¯ã€‚è¯¥é¡¹ç›®è¿˜å®ç°äº†Java NIOï¼Œèƒ½å¤Ÿå®ç°éé˜»å¡äº‹ä»¶é©±åŠ¨æ¨¡å‹
 This repository contains a barebones WebSocket server and client implementation
 written in 100% Java. The underlying classes are implemented `java.nio`, which allows for a
 non-blocking event-driven model (similar to the
 [WebSocket API](http://dev.w3.org/html5/websockets/) for web browsers).
 
-ÏÂÃæÊÇÊµÏÖ websocket Ğ­Òé°æ±¾¡£
-Í¨³£Draft17ÊÇ¾­³£Ê¹ÓÃµÄ¡£ÏÖÔÚ±»chrome16+ºÍIE10Ö§³Ö£¬¿ÉÄÜÒÔºóÆäËûµÄä¯ÀÀÆ÷Ò²»áÌí¼Ó¶Ô¸ÃĞ­ÒéµÄÖ§³Ö¡£
+ä¸‹é¢æ˜¯å®ç° websocket åè®®ç‰ˆæœ¬ã€‚
+é€šå¸¸Draft17ï¼ˆåœ¨nettyä¸­å¯¹åº”çš„åº”è¯¥æ˜¯13ï¼‰æ˜¯ç»å¸¸ä½¿ç”¨çš„ã€‚ç°åœ¨è¢«chrome16+å’ŒIE10æ”¯æŒï¼Œå¯èƒ½ä»¥åå…¶ä»–çš„æµè§ˆå™¨ä¹Ÿä¼šæ·»åŠ å¯¹è¯¥åè®®çš„æ”¯æŒã€‚
 Implemented WebSocket protocol versions are:
 
  * [RFC 6455](http://tools.ietf.org/html/rfc6455)
@@ -24,8 +24,8 @@ Implemented WebSocket protocol versions are:
 
 ##Build
 You can build using Ant or Maven but there is nothing against just putting the source path ```src/main/java ``` on your applications buildpath.
-Äã¿ÉÒÔÊ¹ÓÃant »òÕßÊÇmaven±àÒë
-Ê¹ÓÃmaven
+ä½ å¯ä»¥ä½¿ç”¨ant æˆ–è€…æ˜¯mavenç¼–è¯‘
+ä½¿ç”¨maven
 maven clean compile (install)
 maven eclipse:eclipse
 ###Ant
@@ -55,37 +55,37 @@ Running the Examples
 **Note:** If you're on Windows, then replace the `:` (colon) in the classpath
 in the commands below with a `;` (semicolon).
 
-±àÒëÍê³ÉÖ®ºó£¬¿ÉÒÔÆô¶¯chat server
+ç¼–è¯‘å®Œæˆä¹‹åï¼Œå¯ä»¥å¯åŠ¨chat server
 After you build the library you can start the chat server (a `WebSocketServer` subclass):
 
 ``` bash
 java -cp build/examples:dist/java_websocket.jar ChatServer
 ```
 
-Æô¶¯chat server Ö®ºó£¬¿ÉÒÔÆô¶¯Ò»Ğ©clientÀ´²âÊÔ
+å¯åŠ¨chat server ä¹‹åï¼Œå¯ä»¥å¯åŠ¨ä¸€äº›clientæ¥æµ‹è¯•
 Now that the server is started, you need to connect some clients. Run the
 Java chat client (a `WebSocketClient` subclass):
 
 ``` bash
 java -cp build/examples:dist/java_websocket.jar ChatClient
 ```
-ÈçºÎÊÇÆô¶¯java swing GUI Äã¿ÉÒÔÏòËùÓĞÆäËûµÄÁ¬½Ó·¢ËÍÏûÏ¢£¬Ò²¿ÉÒÔÊÕµ½ÆäËû¿Í»§¶Ë·¢ËÍµÄÏûÏ¢
+å¦‚ä½•æ˜¯å¯åŠ¨java swing GUI ä½ å¯ä»¥å‘æ‰€æœ‰å…¶ä»–çš„è¿æ¥å‘é€æ¶ˆæ¯ï¼Œä¹Ÿå¯ä»¥æ”¶åˆ°å…¶ä»–å®¢æˆ·ç«¯å‘é€çš„æ¶ˆæ¯
 The chat client is a simple Swing GUI application that allows you to send
 messages to all other connected clients, and receive messages from others in a
 text box.
 
-ÄãÒ²¿ÉÒÔ´ò¿ªchat.html Ò³Ãæ£¬Èç¹û´ò¿ªµÄä¯ÀÀÆ÷ ²»Ö§³Ö websocketĞ­Òé£¬ÄÇÃ´¾Í»áµ÷ÓÃFlash²å¼şÀ´Ä£Äâwebsocket£¨Ä£ÄâÆ÷µÄµØÖ·ÊÇhttp://github.com/gimite/web-socket-js£©
+ä½ ä¹Ÿå¯ä»¥æ‰“å¼€chat.html é¡µé¢ï¼Œå¦‚æœæ‰“å¼€çš„æµè§ˆå™¨ ä¸æ”¯æŒ websocketåè®®ï¼Œé‚£ä¹ˆå°±ä¼šè°ƒç”¨Flashæ’ä»¶æ¥æ¨¡æ‹Ÿwebsocketï¼ˆæ¨¡æ‹Ÿå™¨çš„åœ°å€æ˜¯http://github.com/gimite/web-socket-jsï¼‰
 In the example folder is also a simple HTML file chat client `chat.html`, which can be opened by any browser. If the browser natively supports the WebSocket API, then it's
 implementation will be used, otherwise it will fall back to a
 [Flash-based WebSocket Implementation](http://github.com/gimite/web-socket-js).
 
 
-ÏÂÃæÊÇÈçºÎÊµÏÖÄã×Ô¼ºµÄwebsocket server
+ä¸‹é¢æ˜¯å¦‚ä½•å®ç°ä½ è‡ªå·±çš„websocket server
 Writing your own WebSocket Server
 ---------------------------------
 
-org.java_websocket.server.WebSocketServer Õâ¸ö³éÏóÀàÊµÏÖÁËserverÒ»¶ÎµÄwebsocketĞ­Òé¡£
-websocket server³ıÁËÍ¨¹ıhttp½¨Á¢socketÁ¬½Ó£¬±¾Éí²»×öÈÎºÎÊÂÇé¡£Äã¿ÉÒÔĞ´Ò»¸ö×ÓÀà£¬ÊµÏÖÄã×Ô¼ºµÄÄ¿µÄ¡£
+org.java_websocket.server.WebSocketServer è¿™ä¸ªæŠ½è±¡ç±»å®ç°äº†serverä¸€æ®µçš„websocketåè®®ã€‚
+websocket serveré™¤äº†é€šè¿‡httpå»ºç«‹socketè¿æ¥ï¼Œæœ¬èº«ä¸åšä»»ä½•äº‹æƒ…ã€‚ä½ å¯ä»¥å†™ä¸€ä¸ªå­ç±»ï¼Œå®ç°ä½ è‡ªå·±çš„ç›®çš„ã€‚
 
 
 The `org.java_websocket.server.WebSocketServer` abstract class implements the
@@ -96,10 +96,10 @@ connections though HTTP. After that it's up to **your** subclass to add purpose.
 
 
 
-org.java_websocket.server.WebSocketClient ÕâÊÇÒ»¸öÁ¬½Ówebsocket ¿Í»§¶ËµÄ³éÏóÀà¡£
-Æä¹¹Ôìº¯ÊıÊÇÍ¨¹ıws Á¬½Óµ½·şÎñÆ÷µÄ¡£
-Æä`onOpen`, `onClose`, `onMessage` and `onIOError` ½«ÔÚÕû¸öÉúÃüÖÜÆÚÖĞ£¬¶¼ÓĞĞ§¡£
-¶øÇÒ±ØĞëÔÚÄãµÄ×ÓÀàÖĞĞ´¾ßÌåÊµÏÖ¡£
+org.java_websocket.server.WebSocketClient è¿™æ˜¯ä¸€ä¸ªè¿æ¥websocket å®¢æˆ·ç«¯çš„æŠ½è±¡ç±»ã€‚
+å…¶æ„é€ å‡½æ•°æ˜¯é€šè¿‡ws è¿æ¥åˆ°æœåŠ¡å™¨çš„ã€‚
+å…¶`onOpen`, `onClose`, `onMessage` and `onIOError` å°†åœ¨æ•´ä¸ªç”Ÿå‘½å‘¨æœŸä¸­ï¼Œéƒ½æœ‰æ•ˆã€‚
+è€Œä¸”å¿…é¡»åœ¨ä½ çš„å­ç±»ä¸­å†™å…·ä½“å®ç°ã€‚
 Writing your own WebSocket Client
 ---------------------------------
 
@@ -131,7 +131,7 @@ If you want to use `wss` on the android platfrom you should take a look at [this
 I ( @Davidiusdadi ) would be glad if you would give some feedback whether wss is working fine for you or not.
 
 
-Èí¼şÖ§³Ö¡£
+è½¯ä»¶æ”¯æŒã€‚
 Minimum Required JDK
 --------------------
 
@@ -186,14 +186,14 @@ the `LICENSE` file for specifics.
 
 
 
-websocket ·şÎñÆ÷ÄÚºË½éÉÜ£º
-ËäÈ»·şÎñÆ÷ºÍ¿Í»§¶Ë¶¼ÊÇÓÃNIOÊµÏÖµÄ£¬µ«ÊÇÊ¹ÓÃ·½Ê½ÊÇ²»Ò»ÑùµÄ¡£¿Í»§¶ËÊÇÓÃÒ»¸öÏß³ÌÀ´´¦Àí¶ÁĞ´£¬µ«ÊÇ·şÎñÆ÷È´ÊÇÓÃ¶à¸öÏß³ÌÀ´´¦Àí¶ÁĞ´¡£
-·şÎñÆ÷Ê¹ÓÃÒ»¸öÑ¡ÔñÆ÷Ïß³ÌºÍ¶à¸ö¹¤×÷Ïß³Ì¡£
-Ñ¡ÔñÆ÷Ïß³ÌÖ´ĞĞËùÓĞµÄNIO²Ù×÷£¬Æä×¢²áÁ¬½ÓºÍ¶ÁĞ´Í¨µÀ¡£
-µ«ÊÇÑ¡ÔñÆ÷²»×öÈÎºÎµÄ±àÂëºÍ½âÂë¹¤×÷£¬ÕâĞ©¶¼ÊÇ¹¤×÷Ïß³ÌÔÚÖ´ĞĞ¡£
-Ñ¡ÔñÆ÷ºÍ¹¤×÷Ïß³ÌÖ®¼äµÄ½»»¥Í¨¹ı¶ÓÁĞÀ´Íê³É¡£°üÀ¨½âÂë¶ÓÁĞ£¬Ğ´¶ÓÁĞºÍ»º´æ¶ÓÁĞ¡£
-ÆäÑ­»·¹¤×÷ÖÜÆÚÊÇ£ºÑ¡ÔñÆ÷´Ó»º´æ¶ÓÁĞÖĞÄÃÒ»¸öÎ´Ê¹ÓÃµÄ»º´æ£¬½«Í¨µÀ×¼±¸ºÃµÄÊı¾İ·ÅÈëÆäÖĞ£¬È»ºó½«¸Ã»º´æ¼ÓÈë½âÂë¶ÓÁĞ¡£È»ºó¹¤×÷Ïß³Ì´Ó½âÂë¶ÓÁĞÖĞÄÃ³ö»º´æ£¬Ïû·ÑÆäÖĞµÄÄÚÈİ¡£È»ºó½«»º´æÖØĞÂ·Åµ½»º³åÇø¶ÓÁĞÖĞ¡£
-¸Ã·şÎñÆ÷µÄĞÔÄÜ¿ÉÒÔÍ¨¹ıµ÷Õû¹¤×÷Ïß³ÌµÄÊıÁ¿ºÍ»º´æÇø¶ÓÁĞµÄ´óĞ¡£¬ÒÔ¼°»º´æµÄ´óĞ¡¡£ÒÔ¼°Í¨µÀÄÚ²¿µÄ»º³åÇø´óĞ¡ À´ÌáÉı¡£Î´À´¿ÉÄÜÓĞ·½·¨¿ÉÒÔÖ±½ÓÉèÖÃÕâĞ©²ÎÊı¡£
+websocket æœåŠ¡å™¨å†…æ ¸ä»‹ç»ï¼š
+è™½ç„¶æœåŠ¡å™¨å’Œå®¢æˆ·ç«¯éƒ½æ˜¯ç”¨NIOå®ç°çš„ï¼Œä½†æ˜¯ä½¿ç”¨æ–¹å¼æ˜¯ä¸ä¸€æ ·çš„ã€‚å®¢æˆ·ç«¯æ˜¯ç”¨ä¸€ä¸ªçº¿ç¨‹æ¥å¤„ç†è¯»å†™ï¼Œä½†æ˜¯æœåŠ¡å™¨å´æ˜¯ç”¨å¤šä¸ªçº¿ç¨‹æ¥å¤„ç†è¯»å†™ã€‚
+æœåŠ¡å™¨ä½¿ç”¨ä¸€ä¸ªé€‰æ‹©å™¨çº¿ç¨‹å’Œå¤šä¸ªå·¥ä½œçº¿ç¨‹ã€‚
+é€‰æ‹©å™¨çº¿ç¨‹æ‰§è¡Œæ‰€æœ‰çš„NIOæ“ä½œï¼Œå…¶æ³¨å†Œè¿æ¥å’Œè¯»å†™é€šé“ã€‚
+ä½†æ˜¯é€‰æ‹©å™¨ä¸åšä»»ä½•çš„ç¼–ç å’Œè§£ç å·¥ä½œï¼Œè¿™äº›éƒ½æ˜¯å·¥ä½œçº¿ç¨‹åœ¨æ‰§è¡Œã€‚
+é€‰æ‹©å™¨å’Œå·¥ä½œçº¿ç¨‹ä¹‹é—´çš„äº¤äº’é€šè¿‡é˜Ÿåˆ—æ¥å®Œæˆã€‚åŒ…æ‹¬è§£ç é˜Ÿåˆ—ï¼Œå†™é˜Ÿåˆ—å’Œç¼“å­˜é˜Ÿåˆ—ã€‚
+å…¶å¾ªç¯å·¥ä½œå‘¨æœŸæ˜¯ï¼šé€‰æ‹©å™¨ä»ç¼“å­˜é˜Ÿåˆ—ä¸­æ‹¿ä¸€ä¸ªæœªä½¿ç”¨çš„ç¼“å­˜ï¼Œå°†é€šé“å‡†å¤‡å¥½çš„æ•°æ®æ”¾å…¥å…¶ä¸­ï¼Œç„¶åå°†è¯¥ç¼“å­˜åŠ å…¥è§£ç é˜Ÿåˆ—ã€‚ç„¶åå·¥ä½œçº¿ç¨‹ä»è§£ç é˜Ÿåˆ—ä¸­æ‹¿å‡ºç¼“å­˜ï¼Œæ¶ˆè´¹å…¶ä¸­çš„å†…å®¹ã€‚ç„¶åå°†ç¼“å­˜é‡æ–°æ”¾åˆ°ç¼“å†²åŒºé˜Ÿåˆ—ä¸­ã€‚
+è¯¥æœåŠ¡å™¨çš„æ€§èƒ½å¯ä»¥é€šè¿‡è°ƒæ•´å·¥ä½œçº¿ç¨‹çš„æ•°é‡å’Œç¼“å­˜åŒºé˜Ÿåˆ—çš„å¤§å°ï¼Œä»¥åŠç¼“å­˜çš„å¤§å°ã€‚ä»¥åŠé€šé“å†…éƒ¨çš„ç¼“å†²åŒºå¤§å° æ¥æå‡ã€‚æœªæ¥å¯èƒ½æœ‰æ–¹æ³•å¯ä»¥ç›´æ¥è®¾ç½®è¿™äº›å‚æ•°ã€‚
 
 
 

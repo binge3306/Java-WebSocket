@@ -438,7 +438,6 @@ public class WebSocketImpl implements WebSocket {
 	public void close( int code, String message ) {
 		close( code, message, false );
 	}
-
 	
 	/**
 	 * 

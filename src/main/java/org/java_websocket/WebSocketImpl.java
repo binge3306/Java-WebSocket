@@ -441,13 +441,17 @@ public class WebSocketImpl implements WebSocket {
 
 	/**
 	 * 
+	 * @param code
+	 * @param message
 	 * @param remote
-	 *            Indicates who "generated" <code>code</code>.<br>
-	 *            <code>true</code> means that this endpoint received the <code>code</code> from the other endpoint.<br>
-	 *            false means this endpoint decided to send the given code,<br>
-	 *            <code>remote</code> may also be true if this endpoint started the closing handshake since the other endpoint may not simply echo the <code>code</code> but close the connection the same time this endpoint does do but with an other <code>code</code>. <br>
-	 **/
-
+	 * Indicates who "generated" <code>code</code>.<br>
+	 *  <code>true</code> means that this endpoint received the <code>code</code> from the other endpoint.<br>
+	 *  false means this endpoint decided to send the given code,<br>
+	 *  <code>remote</code> may also be true if this endpoint started the closing handshake 
+	 *  since the other endpoint may not simply echo the <code>code</code> 
+	 *  but close the connection the same time this endpoint does do 
+	 *  but with an other <code>code</code>. <br> 
+	 */
 	protected synchronized void closeConnection( int code, String message, boolean remote ) {
 		if( readystate == READYSTATE.CLOSED ) {
 			return;

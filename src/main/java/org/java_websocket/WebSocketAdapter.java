@@ -61,11 +61,8 @@ public abstract class WebSocketAdapter implements WebSocketListener {
 		FramedataImpl1 resp = new FramedataImpl1( f );
 		resp.setOptcode( Opcode.PONG );
 		conn.sendFrame( resp );
-		// wurunzhou add at 20150612 for onWebsocketPing1
-		onWebsocketPing1();
 	}
 
-	public abstract void onWebsocketPing1();
 	/**
 	 * This default implementation does not do anything. Go ahead and overwrite it.
 	 * 

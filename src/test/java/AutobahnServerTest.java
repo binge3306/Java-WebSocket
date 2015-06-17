@@ -75,10 +75,5 @@ public class AutobahnServerTest extends WebSocketServer {
 		
 	}
 
-	@Override
-	public void onWebsocketPing1() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

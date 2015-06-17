@@ -134,6 +134,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 */
 	public void connect(int heartbeat_) {
 		
+		System.out.println("connect function");
 		// wurunzhou add  at 20150612 for 初始化心跳参数  begin
 		if( heartbeat_ == 0){
 			heartbeat = false;
@@ -169,10 +170,13 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	}
 
 	/**
-	 * Initiates the websocket close handshake. This method does not block<br>
-	 * In oder to make sure the connection is closed use <code>closeBlocking</code>
+	 * Initiates the websocket close handshake. 
+	 * This method does not block<br>
+	 * In oder to make sure the connection is closed
+	 * use <code>closeBlocking</code>
 	 */
 	public void close() {
+		System.out.println("close function");
 		if( writeThread != null ) {
 			engine.close( CloseFrame.NORMAL );
 		}
@@ -232,9 +236,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * 2. 启动写线程（写线程应该是不停的从写缓存队列中取出数据发送出去）
 	 */
 	public void run() {
+		System.out.println("begin 线程");
 		try {
+			System.out.println("111111111");
 			if( socket == null ) {
 				socket = new Socket( proxy );
+				System.out.println("2222");
 			} else if( socket.isClosed() ) {
 				throw new IOException();
 			}
@@ -243,6 +250,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			istream = socket.getInputStream();
 			ostream = socket.getOutputStream();
 
+			System.out.println("33333333");
 			sendHandshake();
 		} catch ( /*IOException | SecurityException | UnresolvedAddressException | InvalidHandshakeException | ClosedByInterruptException | SocketTimeoutException */Exception e ) {
 			onWebsocketError( engine, e );
@@ -277,6 +285,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			engine.closeConnection( CloseFrame.ABNORMAL_CLOSE, e.getMessage() );
 		}
 		assert ( socket.isClosed() );
+		System.out.println("4444444");
 	}
 	private int getPort() {
 		int port = uri.getPort();
@@ -298,6 +307,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * @throws InvalidHandshakeException
 	 */
 	private void sendHandshake() throws InvalidHandshakeException {
+		System.out.println("startHandshake");
 		String path;
 		String part1 = uri.getPath();
 		String part2 = uri.getQuery();
@@ -346,19 +356,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		onFragment( frame );
 	}
 	
-	
-
-	/* (non-Javadoc)
-	 * @see org.java_websocket.WebSocketAdapter#onWebsocketPing1()
-	 */
-	@Override
-	public void onWebsocketPing1() {
-		System.out.println("onWebsocketPing1 执行");
-		//lock.lock();
-		pongNeartTime = new Date();
-		//lock.unlock();
-		pingTimes.set(0);
-	}
 
 	/**
 	 * Calls subclass' implementation of <var>onOpen</var>.
@@ -401,7 +398,11 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		Date currentTime = new Date();
 		SimpleDateFormat dateString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		System.out.println("onWebsocketPong"+dateString.format(currentTime));
+		System.out.println("收到心跳应答，onWebsocketPong at"+dateString.format(currentTime));
+		//lock.lock();
+		pongNeartTime = new Date();
+		//lock.unlock();
+		pingTimes.set(0);
 	}
 
 	@Override
@@ -491,6 +492,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		@Override
 		public void run() {
 			
+			Thread.currentThread().setName( "HeartbeatReceiveThread" );
 			boolean pass = true;
 			
 			while(pass){
@@ -533,6 +535,8 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		}
 		@Override
 		public void run() {
+			
+			Thread.currentThread().setName( "HeartbeatSendThread" );
 			try {
 				TimeUnit.SECONDS.sleep(5);
 			} catch (InterruptedException e1) {
@@ -606,8 +610,35 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			// 启动重连
 
 			//onWebsocketError(conn,);
-			onError(new WebsocketPongResponseException());
+			closeConnect_(new WebsocketPongResponseException(), "心跳机制判断连接失效");
 		}
+		
+	}
+	
+
+	/**
+	 * 
+	 * @param e1
+	 * @param info
+	 */
+	private void closeConnect_(Exception e1,String info){
+//		close();
+//		try {
+//			if( socket != null )
+//				socket.close();
+//			if(writeThread != null){
+//				writeThread.interrupt();
+//			}
+//		} catch ( IOException e ) {
+//			onWebsocketError( this, e );
+//		}
+//		writeThread  = null;
+//		socket = null;
+		
+		close();
+		onError(e1);
+		//closeConnection(2002, info);
+		//onWebsocketClose(this,2002,info,true);
 		
 	}
 
@@ -624,11 +655,11 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public boolean  checkException() {
 		// 如果还是为0 表示没有异常
 		if(PongExceptionTrue.get() == 0){
-			return true;	
+			return false;	
 		}else{
 			// 否则表示有接收应答异常
 		}
-		return false;
+		return true;
 	}
 
 	/**

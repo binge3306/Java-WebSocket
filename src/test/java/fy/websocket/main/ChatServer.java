@@ -104,9 +104,4 @@ public class ChatServer extends WebSocketServer {
 		
 	}
 
-	@Override
-	public void onWebsocketPing1() {
-		// TODO Auto-generated method stub
-		
-	}
 }

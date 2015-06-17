@@ -439,6 +439,7 @@ public class WebSocketImpl implements WebSocket {
 		close( code, message, false );
 	}
 
+	
 	/**
 	 * 
 	 * @param code

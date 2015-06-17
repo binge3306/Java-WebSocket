@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
-    <Class name="org.java_websocket.drafts.Draft_fysocket.VerifyState"
-        x="500" y="439">
+    <Class name="org.java_websocket.client.WebSocketClient" x="80" y="300">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -9,54 +8,14 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="org.java_websocket.framing.CloseFrame" x="1252" y="86">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.framing.Framedata"/>
-    </Class>
-    <Class name="org.java_websocket.drafts.Draft.CloseHandshakeType"
-        x="534" y="44">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="org.java_websocket.framing.Framedata" x="970" y="113">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="org.java_websocket.drafts.Draft_fysocket" x="196" y="422">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.drafts.Draft"/>
+        <Extension destinationClassName="org.java_websocket.WebSocketAdapter"/>
+        <Extension destinationClassName="org.java_websocket.WebSocket"/>
         <Association
-            destinationClassName="org.java_websocket.framing.Framedata"
-            endpointName="fragmentedframe" kind="Simple"/>
-        <Communication destinationClassName="org.java_websocket.framing.Framedata"/>
-        <Communication destinationClassName="org.java_websocket.drafts.Draft_fysocket.IncompleteException"/>
-        <Communication destinationClassName="org.java_websocket.framing.FrameBuilder"/>
-        <Communication destinationClassName="org.java_websocket.drafts.Draft"/>
+            destinationClassName="org.java_websocket.WebSocketImpl"
+            endpointName="engine" kind="Simple"/>
+        <Communication destinationClassName="org.java_websocket.WebSocketImpl"/>
     </Class>
-    <Class name="org.java_websocket.framing.CloseFrameBuilder" x="1260" y="216">
+    <Class name="org.java_websocket.WebSocketAdapter" x="173" y="58">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -64,9 +23,10 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.framing.CloseFrame"/>
+        <Extension destinationClassName="org.java_websocket.WebSocketListener"/>
+        <Communication destinationClassName="org.java_websocket.WebSocket"/>
     </Class>
-    <Class name="org.java_websocket.framing.FramedataFysocket" x="1033" y="398">
+    <Class name="org.java_websocket.WebSocketListener" x="1006" y="-38">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -74,15 +34,65 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.framing.FrameBuilder"/>
+    </Class>
+    <Class name="fy.socket.JavaWebsocket.service.APPClient" x="-464" y="1024">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="fy.socket.JavaWebsocket.abs.APPClientAbs"/>
+        <Communication destinationClassName="fy.socket.JavaWebsocket.abs.APPClientAbs"/>
+    </Class>
+    <Class name="fy.socket.JavaWebsocket.core.WebsocketClientImpl"
+        x="-466" y="228">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.client.WebSocketClient"/>
+        <Communication destinationClassName="org.java_websocket.client.WebSocketClient"/>
+    </Class>
+    <Class name="org.java_websocket.WebSocket.READYSTATE" x="900" y="283">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="fy.socket.JavaWebsocket.abs.APPClientAbs" x="-492" y="554">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
         <Association
-            destinationClassName="org.java_websocket.framing.Framedata.Opcode"
-            endpointName="optcode" kind="Simple"/>
-        <Communication destinationClassName="org.java_websocket.framing.Framedata"/>
+            destinationClassName="fy.socket.JavaWebsocket.core.WebsocketClientImpl"
+            endpointName="coreClient" kind="Simple"/>
+        <Communication destinationClassName="org.java_websocket.client.WebSocketClient"/>
     </Class>
     <Class
-        name="org.java_websocket.drafts.Draft_fysocket.IncompleteException"
-        x="649" y="442">
+        name="org.java_websocket.client.WebSocketClient.WebsocketWriteThread"
+        x="334" y="348">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="org.java_websocket.WebSocketImpl"/>
+    </Class>
+    <Class name="org.java_websocket.WebSocket.Role" x="647" y="265">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -91,7 +101,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.drafts.Draft.HandshakeState" x="259" y="67">
+    <Class name="org.java_websocket.WebSocket" x="637" y="284">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -100,7 +110,9 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="org.java_websocket.framing.FrameBuilder" x="934" y="270">
+    <Class
+        name="org.java_websocket.client.WebSocketClient.HeartbeatSendThread"
+        x="334" y="514">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -108,9 +120,10 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="org.java_websocket.framing.Framedata"/>
+        <Communication destinationClassName="org.java_websocket.client.WebSocketClient"/>
+        <Communication destinationClassName="org.java_websocket.WebSocketImpl"/>
     </Class>
-    <Class name="org.java_websocket.framing.Framedata.Opcode" x="1064" y="16">
+    <Class name="org.java_websocket.WebSocketImpl" x="1103" y="449">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -118,18 +131,27 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="org.java_websocket.drafts.Draft" x="117" y="69">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.java_websocket.WebSocket"/>
         <Association
-            destinationClassName="org.java_websocket.framing.Framedata.Opcode"
-            endpointName="continuousFrameType" kind="Simple"/>
-        <Communication destinationClassName="org.java_websocket.framing.FrameBuilder"/>
+            destinationClassName="org.java_websocket.WebSocketListener"
+            endpointName="wsl" kind="Simple"/>
+        <Association
+            destinationClassName="org.java_websocket.WebSocket.READYSTATE"
+            endpointName="readystate" kind="Simple"/>
+        <Association
+            destinationClassName="org.java_websocket.WebSocket.Role"
+            endpointName="role" kind="Simple"/>
+        <Communication destinationClassName="org.java_websocket.WebSocketListener"/>
+    </Class>
+    <Class
+        name="org.java_websocket.client.WebSocketClient.HeartbeatReceiveThread"
+        x="328" y="430">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
     </Class>
 </ClassDiagram>

@@ -692,15 +692,15 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 ////		close();
 //		if(writeThread.isAlive())
 //			writeThread.interrupt();
-//		try {
-//			if( socket != null )
-//				socket.close();
-//			if(workThread != null&&workThread.isAlive()){
-//				workThread.interrupt();
-//			}
-//		} catch ( IOException e ) {
-//			onWebsocketError( this, e );
-//		}
+		try {
+			if( socket != null ){
+				socket.close();
+				System.out.println("关闭socket");
+			}
+		} catch ( IOException e ) {
+			onWebsocketError( this, e );
+		}
+		notifyAll();
 //		writeThread  = null;
 //		socket = null;
 		System.out.println("1111111-----------------------");

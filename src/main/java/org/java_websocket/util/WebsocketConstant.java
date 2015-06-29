@@ -9,7 +9,7 @@ public enum WebsocketConstant {
 	/**
 	 *  接收pong应答时间间隔超过2分钟认为可以跑出接收应答异常。
 	 */
-	HeartbeatPongCycle("100"),
+	HeartbeatPongCycle("70"),
 	
 	/**
 	 * 默认是否使用心跳（1表示使用）

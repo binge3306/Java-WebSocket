@@ -9,6 +9,7 @@ import java.nio.channels.NotYetConnectedException;
 import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -64,6 +65,10 @@ public class WebSocketImpl implements WebSocket {
 	 * Queue of buffers that need to be sent to the client.
 	 */
 	public final BlockingQueue<ByteBuffer> outQueue;
+	/**
+	 * 为了确认消息收发时间，来确认消息系统的效率。
+	 */
+	public final BlockingQueue<Date> outQueueTime;
 	/**
 	 * Queue of buffers that need to be processed
 	 */
@@ -128,6 +133,7 @@ public class WebSocketImpl implements WebSocket {
 		if( listener == null || ( draft == null && role == Role.SERVER ) )// socket can be null because we want do be able to create the object without already having a bound channel
 			throw new IllegalArgumentException( "parameters must not be null" );
 		this.outQueue = new LinkedBlockingQueue<ByteBuffer>();
+		this.outQueueTime = new LinkedBlockingQueue<Date>();
 		inQueue = new LinkedBlockingQueue<ByteBuffer>();
 		this.wsl = listener;
 		this.role = Role.CLIENT;
@@ -479,6 +485,7 @@ public class WebSocketImpl implements WebSocket {
 
 		readystate = READYSTATE.CLOSED;
 		this.outQueue.clear();
+		this.outQueueTime.clear();
 	}
 
 	protected void closeConnection( int code, boolean remote ) {
@@ -670,6 +677,8 @@ public class WebSocketImpl implements WebSocket {
 			System.out.println( "write(" + buf.remaining() + "): {" + ( buf.remaining() > 1000 ? "too big to display" : new String( buf.array() ) ) + "}" );
 
 		outQueue.add( buf );
+
+		outQueueTime.add(new Date());
 		/*try {
 			outQueue.put( buf );
 		} catch ( InterruptedException e ) {

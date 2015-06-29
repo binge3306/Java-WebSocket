@@ -17,6 +17,7 @@ public interface WebSocket {
 		NOT_YET_CONNECTED, CONNECTING, OPEN, CLOSING, CLOSED;
 	}
 
+	
 	/**
 	 * The default port of WebSockets, as defined in the spec. If the nullary
 	 * constructor is used, DEFAULT_PORT will be the port the WebSocketServer

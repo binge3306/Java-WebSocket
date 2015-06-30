@@ -1,6 +1,8 @@
 package org.java_websocket.util.logger;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -23,7 +25,7 @@ public class LoggerUtil {
 	
  
 	/**
-	 * Hander 使用来控制日志输出位置 （文件 socketFy.log ）
+	 * Hander 使用来控制日志输出位置 （文件 fysocket.log ）
 	 */
 	private static Handler handler;
 	
@@ -50,7 +52,9 @@ public class LoggerUtil {
 			 * with the format specified by the MyFormatter class
 			 */
 			if (handler==null) {
-				handler=new FileHandler("recipe8.log");
+				
+				String loggerFileName = "fysocket"+ getConcurrentTime() +".log";
+				handler=new FileHandler(loggerFileName);
 				Formatter format=new LoggerFormatter();
 				handler.setFormatter(format);
 			}
@@ -74,5 +78,12 @@ public class LoggerUtil {
 		 */
 		return logger;
 	}
-
+	
+	private static String getConcurrentTime(){
+	      Date dNow = new Date( );
+	      SimpleDateFormat ft = 
+	      new SimpleDateFormat ("yyyyMMdd-hhmmss");
+	      return ft.format(dNow);
+	}
+	
 }

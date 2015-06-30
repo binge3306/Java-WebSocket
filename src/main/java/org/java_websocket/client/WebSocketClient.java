@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketAdapter;
@@ -34,6 +36,7 @@ import org.java_websocket.handshake.HandshakeImpl1Client;
 import org.java_websocket.handshake.Handshakedata;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.util.WebsocketConstant;
+import org.java_websocket.util.logger.LoggerUtil;
 
 /**
  * A subclass must implement at least <var>onOpen</var>, <var>onClose</var>, and <var>onMessage</var> to be
@@ -41,6 +44,10 @@ import org.java_websocket.util.WebsocketConstant;
  */
 public abstract class WebSocketClient extends WebSocketAdapter implements Runnable, WebSocket {
 
+	/**
+	 * 日志
+	 */
+	private Logger logger = LoggerUtil.getLogger(this.getClass().getName());
 	/**
 	 * The URI this channel is supposed to connect to.
 	 */
@@ -142,7 +149,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 */
 	public void connect(int heartbeat_) {
 		
-		System.out.println("connect function");
+		logger.log(Level.INFO, "connect function");
 		// wurunzhou add  at 20150612 for 初始化心跳参数  begin
 		if( heartbeat_ == 0){
 			heartbeat = false;
@@ -185,7 +192,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * use <code>closeBlocking</code>
 	 */
 	public void close() {
-		System.out.println("close function");
+		logger.log(Level.INFO,"close function");
 		if( writeThread != null ) {
 			engine.close( CloseFrame.NORMAL );
 		}
@@ -246,7 +253,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 */
 	public void run() {
 		Thread.currentThread().setName("workMain");
-		System.out.println("dealMainThread start");
+		logger.log(Level.INFO,"dealMainThread start");
 		workThread = new Thread(new MainReceiveThread());
 //		workThread.setDaemon(true);
 		workThread.start();
@@ -257,9 +264,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 //				e.printStackTrace();
 //				beatpass = false;
 //			}
-//			System.out.println("=-=-=-");
+//			logger.log(Level.INFO,"=-=-=-");
 //		}
-//		System.out.println("workMainThread Over");
+//		logger.log(Level.INFO,"workMainThread Over");
 	}
 	private int getPort() {
 		int port = uri.getPort();
@@ -281,7 +288,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * @throws InvalidHandshakeException
 	 */
 	private void sendHandshake() throws InvalidHandshakeException {
-		System.out.println("startHandshake");
+		logger.log(Level.INFO,"startHandshake");
 		String path;
 		String part1 = uri.getPath();
 		String part2 = uri.getQuery();
@@ -324,7 +331,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				Date date1 = engine.outQueueTime.take();
 				Date current = new Date();
 				long times = current.getTime()-date1.getTime();
-				System.out.println("处理时间 "+times  +",微妙");
+				logger.log(Level.INFO,"处理时间 "+times  +",微妙");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -387,7 +394,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		Date currentTime = new Date();
 		SimpleDateFormat dateString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		System.out.println("收到心跳应答，onWebsocketPong at"+dateString.format(currentTime));
+		logger.log(Level.INFO,"收到心跳应答，onWebsocketPong at"+dateString.format(currentTime));
 		//lock.lock();
 		pongNeartTime = new Date();
 		//lock.unlock();
@@ -456,25 +463,25 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	private class MainReceiveThread implements Runnable{
 
 		public MainReceiveThread(){
-			//System.out.println("++=");
+			//logger.log(Level.INFO,"++=");
 		}
 		@Override
 		public void run() {
 			Thread.currentThread().setName("workreceiveThread");
 			boolean  pass = true;
-			//System.out.println("+++++++");
+			//logger.log(Level.INFO,"+++++++");
 			while(pass){
 				if(Thread.currentThread().isInterrupted()) {pass = false; continue;}
 
 				Thread.currentThread().setName("WebsocketReceiveThread" +getTime());
-				System.out.println("begin 线程");
+				logger.log(Level.INFO,"begin 线程");
 				try {
-					System.out.println("111111111");
+					//logger.log(Level.INFO,"111111111");
 					if( socket == null ) {
 						socket = new Socket( proxy );
 						//socket.setKeepAlive(true);
 						//socket.setSoTimeout(30*1000);
-						System.out.println("2222");
+						logger.log(Level.INFO,"2222");
 					} else if( socket.isClosed() ) {
 						throw new IOException();
 					}
@@ -483,7 +490,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 					istream = socket.getInputStream();
 					ostream = socket.getOutputStream();
 
-					System.out.println("33333333");
+				//	logger.log(Level.INFO,"33333333");
 					sendHandshake();
 				} catch ( /*IOException | SecurityException | UnresolvedAddressException | InvalidHandshakeException | ClosedByInterruptException | SocketTimeoutException */Exception e ) {
 					onWebsocketError( engine, e );
@@ -522,20 +529,20 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 					while ( !isClosed() && ( readBytes = istream.read( rawbuffer ) ) != -1&&(!Thread.currentThread().isInterrupted()) ) {
 						// 不断读取服务器消息
 						engine.decode( ByteBuffer.wrap( rawbuffer, 0, readBytes ) );
-						//System.out.println("-");
+						//logger.log(Level.INFO,"-");
 					}
 					engine.eot();
 				} catch ( IOException e ) {
 					engine.eot();
-					System.out.println("--");
+					logger.log(Level.SEVERE,"--异常"+e.toString());
 				} catch ( RuntimeException e ) {
 					// this catch case covers internal errors only and indicates a bug in this websocket implementation
 					onError( e );
 					engine.closeConnection( CloseFrame.ABNORMAL_CLOSE, e.getMessage() );
-					System.out.println("----");
+					logger.log(Level.SEVERE,"----异常"+e.toString());
 				}
 				assert ( socket.isClosed() );
-				System.out.println("4444444-websocketClient");
+				logger.log(Level.WARNING,"4444444-websocketClient");
 			
 				
 				
@@ -568,9 +575,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				engine.eot();
 			} catch ( InterruptedException e ) {
 				// this thread is regularly terminated via an interrupt
-				System.out.println("websocketWriteThread be interrupted");
+				logger.log(Level.SEVERE,"websocketWriteThread be interrupted");
 			}
-			System.out.println("44444444444wesocketWriteThread");
+			logger.log(Level.WARNING,"44444444444wesocketWriteThread");
 		}
 		
 	}
@@ -608,7 +615,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				}
 			}
 			
-			System.out.println("4444444444HeartbeatReceiveThread");
+			logger.log(Level.WARNING,"4444444444HeartbeatReceiveThread");
 		}
 		
 	}
@@ -636,14 +643,14 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			} catch (InterruptedException e1) {
 
 			}
-			System.out.println("启动heartbeat send Thread ");
+			logger.log(Level.INFO,"启动heartbeat send Thread ");
 			boolean pass = true;
 			if(!heartbeat){
 				// 在这里waite
 				// object.w
 				return ;
 			}
-			System.out.println("开始发送心跳");
+			logger.log(Level.INFO,"开始发送心跳");
 			int checkExceptionTimes = 0;
 			while(pass){
 				try {
@@ -694,7 +701,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 						}
 					}
 				}catch(InterruptedException e){
-					System.out.println("休眠5秒过程出现异常");
+					logger.log(Level.INFO,"休眠5秒过程出现异常");
 					pass = false;
 				}
 				
@@ -705,7 +712,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 			//onWebsocketError(conn,);
 			closeConnect_(new WebsocketPongResponseException(), "心跳机制判断连接失效");
-			System.out.println("444444444HeartbeatSendThread");
+			logger.log(Level.WARNING,"444444444HeartbeatSendThread");
 		}
 		
 	}
@@ -724,7 +731,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		try {
 			if( socket != null ){
 				socket.close();
-				System.out.println("关闭socket");
+				logger.log(Level.SEVERE,"关闭socket");
 			}
 		} catch ( IOException e ) {
 			onWebsocketError( this, e );
@@ -732,12 +739,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		notifyAll();
 //		writeThread  = null;
 //		socket = null;
-		System.out.println("1111111-----------------------");
+	//	logger.log(Level.INFO,"1111111-----------------------");
 		synchronized (this) {
 			beatpass = false;	
 		}
 		
-		System.out.println("22222222222-----------------------");
+		//logger.log(Level.INFO,"22222222222-----------------------");
 		onError(e1);
 		//closeConnection(2002, info);
 		//onWebsocketClose(this,2002,info,true);

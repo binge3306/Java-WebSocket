@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft.CloseHandshakeType;
@@ -36,6 +38,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.handshake.ServerHandshakeBuilder;
 import org.java_websocket.server.WebSocketServer.WebSocketWorker;
 import org.java_websocket.util.Charsetfunctions;
+import org.java_websocket.util.logger.LoggerUtil;
 
 /**
  * Represents one end (client or server) of a single WebSocketImpl connection.
@@ -45,6 +48,11 @@ import org.java_websocket.util.Charsetfunctions;
  */
 public class WebSocketImpl implements WebSocket {
 
+	/**
+	 * 日志
+	 */
+	private Logger logger = LoggerUtil.getLogger(this.getClass().getName());
+	
 	public static int RCVBUF = 16384;
 
 	public static/*final*/boolean DEBUG = false; // must be final in the future in order to take advantage of VM optimization
@@ -158,7 +166,7 @@ public class WebSocketImpl implements WebSocket {
 		assert ( socketBuffer.hasRemaining() );
 
 		if( DEBUG )
-			System.out.println( "process(" + socketBuffer.remaining() + "): {" + ( socketBuffer.remaining() > 1000 ? "too big to display" : new String( socketBuffer.array(), socketBuffer.position(), socketBuffer.remaining() ) ) + "}" );
+			logger.log(Level.INFO, "process(" + socketBuffer.remaining() + "): {" + ( socketBuffer.remaining() > 1000 ? "too big to display" : new String( socketBuffer.array(), socketBuffer.position(), socketBuffer.remaining() ) ) + "}" );
 
 		if( readystate != READYSTATE.NOT_YET_CONNECTED ) {
 			decodeFrames( socketBuffer );;
@@ -327,7 +335,7 @@ public class WebSocketImpl implements WebSocket {
 			frames = draft.translateFrame( socketBuffer );
 			for( Framedata f : frames ) {
 				if( DEBUG )
-					System.out.println( "matched frame: " + f );
+					logger.log(Level.INFO, "matched frame: " + f );
 				Opcode curop = f.getOpcode();
 				boolean fin = f.isFin();
 
@@ -621,7 +629,7 @@ public class WebSocketImpl implements WebSocket {
 	@Override
 	public void sendFrame( Framedata framedata ) {
 		if( DEBUG )
-			System.out.println( "send frame: " + framedata );
+			logger.log(Level.INFO, "send frame: " + framedata );
 		write( draft.createBinaryFrame( framedata ) );
 	}
 
@@ -674,7 +682,7 @@ public class WebSocketImpl implements WebSocket {
 
 	private void write( ByteBuffer buf ) {
 		if( DEBUG )
-			System.out.println( "write(" + buf.remaining() + "): {" + ( buf.remaining() > 1000 ? "too big to display" : new String( buf.array() ) ) + "}" );
+			logger.log(Level.INFO, "write(" + buf.remaining() + "): {" + ( buf.remaining() > 1000 ? "too big to display" : new String( buf.array() ) ) + "}" );
 
 		outQueue.add( buf );
 
@@ -697,7 +705,7 @@ public class WebSocketImpl implements WebSocket {
 
 	private void open( Handshakedata d ) {
 		if( DEBUG )
-			System.out.println( "open using draft: " + draft.getClass().getSimpleName() );
+			logger.log(Level.INFO, "open using draft: " + draft.getClass().getSimpleName() );
 		readystate = READYSTATE.OPEN;
 		try {
 			wsl.onWebsocketOpen( this, d );

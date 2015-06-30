@@ -44,6 +44,10 @@ import org.java_websocket.util.logger.LoggerUtil;
  */
 public abstract class WebSocketClient extends WebSocketAdapter implements Runnable, WebSocket {
 
+//	/**
+//	 * 为了测试的方便添加该变量用来表示这是模拟的第几个线程
+//	 */
+//	private static int ThreadNUM = 0;
 	/**
 	 * 日志
 	 */
@@ -102,6 +106,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	/** This open a websocket connection as specified by rfc6455 */
 	public WebSocketClient( URI serverURI ) {
 		this( serverURI, new Draft_17() );
+	}
+	
+	private int USERID = 0;
+	public WebSocketClient( URI serverURI,int userid ) {
+		this( serverURI, new Draft_17() );
+		this.USERID = userid;
 	}
 
 	/**
@@ -331,7 +341,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				Date date1 = engine.outQueueTime.take();
 				Date current = new Date();
 				long times = current.getTime()-date1.getTime();
-				logger.log(Level.INFO,"处理时间 "+times  +",微妙");
+				logger.log(Level.INFO,Thread.currentThread().getName()+" 处理时间 "+times  +" 微妙");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -467,13 +477,13 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		}
 		@Override
 		public void run() {
-			Thread.currentThread().setName("workreceiveThread");
+			//Thread.currentThread().setName("workreceiveThread");
 			boolean  pass = true;
 			//logger.log(Level.INFO,"+++++++");
 			while(pass){
 				if(Thread.currentThread().isInterrupted()) {pass = false; continue;}
 
-				Thread.currentThread().setName("WebsocketReceiveThread" +getTime());
+				Thread.currentThread().setName("WebsocketReceiveThread" +USERID);
 				logger.log(Level.INFO,"begin 线程");
 				try {
 					//logger.log(Level.INFO,"111111111");

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * <br>
  * 该类用来创建一个Logger 对象
  * <br>
- * 通过该类你可以将应用程序中产生的所有被格式化的日志消息输出到指定文件（socketFy.log）。
+ * 通过该类你可以将应用程序中产生的所有被格式化的日志消息输出到指定文件（fysocket+Time.log）。
  * <br>
  * 通过该类来创建logger对象，创建logger对象的时候需要传入类名作为参数。
  *
@@ -25,7 +25,7 @@ public class LoggerUtil {
 	
  
 	/**
-	 * Hander 使用来控制日志输出位置 （文件 fysocket.log ）
+	 * Hander 使用来控制日志输出位置 （文件 fysocket+Time.log ）
 	 */
 	private static Handler handler;
 	

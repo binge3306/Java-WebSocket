@@ -340,8 +340,8 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 					onError(new InvalidDataException(ExceptionErrorCode.OutQueTimeOverFlow.getErrorCode()));
 				Date date1 = engine.outQueueTime.take();
 				Date current = new Date();
-				float times = (float)current.getTime()-date1.getTime()/1000;
-				logger.log(Level.INFO,Thread.currentThread().getName()+" 处理时间 "+times  +" (秒)");
+				long times = current.getTime()-date1.getTime();
+				logger.log(Level.INFO,Thread.currentThread().getName()+" 消息延时时间 "+times  +" (毫秒)");
 			} catch (InterruptedException e) {
 
 				logger.log(Level.SEVERE,"处理确认消息发送成功，发生异常" + e.toString());

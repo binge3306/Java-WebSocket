@@ -12,8 +12,9 @@ import java.nio.channels.NotYetConnectedException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
-
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,6 +77,12 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 	private int connectTimeout = 0;
 	
+	// wurunzhou  add parameter  save sendTime  begin
+	/**
+	 * 为了确认消息收发时间，来确认消息系统的效率。
+	 */
+	private BlockingQueue<Date> outQueueTime;
+	// wurunzhou  add parameter  save sendTime  end 
 
 	/** This open a websocket connection as specified by rfc6455 */
 	public WebSocketClient( URI serverURI ) {
@@ -86,6 +93,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public WebSocketClient( URI serverURI,int userid ) {
 		this( serverURI, new Draft_17() );
 		this.USERID = userid;
+		outQueueTime = new LinkedBlockingQueue<Date>();
 	}
 
 	/**
@@ -224,13 +232,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		Thread.currentThread().setName("workMain");
 		logger.log(Level.INFO,"dealMainThread start");
 
-
-		//Thread.currentThread().setName("workreceiveThread");
-		boolean  pass = true;
-		//logger.log(Level.INFO,"+++++++");
-		while(pass){
-			if(Thread.currentThread().isInterrupted()) {pass = false; continue;}
-
 			Thread.currentThread().setName("WebsocketReceiveThread" +USERID);
 			logger.log(Level.INFO,"begin 线程");
 			try {
@@ -277,11 +278,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			}
 			assert ( socket.isClosed() );
 			logger.log(Level.WARNING,"4444444-websocketClient");
-		
-			
-			
-		}
-	
 	
 	}
 	private int getPort() {
@@ -342,9 +338,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public final void onWebsocketMessage( WebSocket conn, String message ) {
 		if("msg__OK".equals(message)){
 			try {
-				if(engine.outQueueTime.size() > 60)
+				if(outQueueTime.size() > 60)
 					onError(new InvalidDataException(ExceptionErrorCode.OutQueTimeOverFlow.getErrorCode()));
-				Date date1 = engine.outQueueTime.take();
+				Date date1 = outQueueTime.take();
 				Date current = new Date();
 				long times = current.getTime()-date1.getTime();
 				logger.log(Level.INFO,Thread.currentThread().getName()+" 消息延时时间 "+times  +" (毫秒)");
@@ -385,6 +381,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public final void onWebsocketClose( WebSocket conn, int code, String reason, boolean remote ) {
 		connectLatch.countDown();
 		closeLatch.countDown();
+		outQueueTime.clear();
 		if( writeThread != null )
 			writeThread.interrupt();
 		try {
@@ -479,12 +476,13 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		
 		@Override
 		public void run() {
-			Thread.currentThread().setName( "WebsocketWriteThread"+getTime());
+			Thread.currentThread().setName( "WebsocketWriteThread"+USERID);
 			try {
 				while ( !Thread.interrupted() ) {
 					ByteBuffer buffer = engine.outQueue.take();
 					ostream.write( buffer.array(), 0, buffer.limit() );
 					ostream.flush();
+					outQueueTime.add(new Date());
 				}
 			} catch ( IOException e ) {
 				engine.eot();
@@ -589,9 +587,5 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public String getResourceDescriptor() {
 		return uri.getPath();
 	}
-	private String getTime(){
-		Date current = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("MMdd-hhmmss");
-		return ft.format(current);
-	}
+
 }

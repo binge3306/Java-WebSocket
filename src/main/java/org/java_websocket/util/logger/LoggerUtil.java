@@ -3,6 +3,7 @@ package org.java_websocket.util.logger;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -82,8 +83,8 @@ public class LoggerUtil {
 	private static String getConcurrentTime(){
 	      Date dNow = new Date( );
 	      SimpleDateFormat ft = 
-	      new SimpleDateFormat ("yyyyMMdd-hhmmss");
-	      return ft.format(dNow);
+	    		  new SimpleDateFormat ("MMddhhmmss-");
+	      return ft.format(dNow)+ new Random().nextInt();
 	}
 	
 }

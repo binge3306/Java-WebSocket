@@ -504,6 +504,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 				Date current  = timequeue.get();
 				if(outQueueTime.isEmpty()){
+					logger.log(Level.WARNING,"存在一次多回复自己一次的情况");
 					continue;
 				}
 				try {

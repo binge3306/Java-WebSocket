@@ -13,10 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,14 +25,12 @@ import org.java_websocket.drafts.Draft_17;
 import org.java_websocket.exceptions.ExceptionErrorCode;
 import org.java_websocket.exceptions.InvalidDataException;
 import org.java_websocket.exceptions.InvalidHandshakeException;
-import org.java_websocket.exceptions.WebsocketPongResponseException;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.framing.Framedata.Opcode;
 import org.java_websocket.handshake.HandshakeImpl1Client;
 import org.java_websocket.handshake.Handshakedata;
 import org.java_websocket.handshake.ServerHandshake;
-import org.java_websocket.util.WebsocketConstant;
 import org.java_websocket.util.logger.LoggerUtil;
 
 /**
@@ -81,27 +76,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 	private int connectTimeout = 0;
 	
-	// wurunzhou add prameters at 20150611 for heartbeat begin
-	// 最近ping 执行时间
-	private Date pingNeartTime;
-
-	// 最近pong 接收时间
-	private Date pongNeartTime;
-	// 记录ping 执行次数
-	private AtomicInteger pingTimes = new AtomicInteger(0);
-	// 用来标记是否抛出接收应答异常
-	private AtomicInteger PongExceptionTrue = new AtomicInteger(0);
-	// 是否执行心跳
-	private boolean heartbeat = "1".equals(WebsocketConstant.HeartbeatTrue.getParameter())?true:false;
-	
-	// 
-	private boolean beatpass = true;
-	
-	// 心跳执行周期
-	private int heartbeatCycle = Integer.parseInt(WebsocketConstant.HearbeatCycle.getParameter());
-	// 准备用来锁定变量
-	//private Lock lock =  new ReentrantLock();
-	// wurunzhou add prameters at 20150611 for heartbeat end
 
 	/** This open a websocket connection as specified by rfc6455 */
 	public WebSocketClient( URI serverURI ) {
@@ -160,21 +134,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public void connect(int heartbeat_) {
 		
 		logger.log(Level.INFO, "connect function");
-		// wurunzhou add  at 20150612 for 初始化心跳参数  begin
-		if( heartbeat_ == 0){
-			heartbeat = false;
-		}else if(heartbeat_ == 1){
-			heartbeat = true;
-			// notify
-		}else if( heartbeat_>1){
-			heartbeat = true;
-			heartbeatCycle = heartbeat_;
-			// notify
-		}else{
-			// 小于1
-			heartbeat = false;
-		}
-		//  wurunzhou add  at 20150612 for 初始化心跳参数  end 
 		if( workThread != null )
 			throw new IllegalStateException( "WebSocketClient objects are not reuseable" );
 		workThread = new Thread( this);
@@ -264,19 +223,66 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public void run() {
 		Thread.currentThread().setName("workMain");
 		logger.log(Level.INFO,"dealMainThread start");
-		workThread = new Thread(new MainReceiveThread());
-//		workThread.setDaemon(true);
-		workThread.start();
-//		while(beatpass){
-//			try {
-//				TimeUnit.SECONDS.sleep(5);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//				beatpass = false;
-//			}
-//			logger.log(Level.INFO,"=-=-=-");
-//		}
-//		logger.log(Level.INFO,"workMainThread Over");
+
+
+		//Thread.currentThread().setName("workreceiveThread");
+		boolean  pass = true;
+		//logger.log(Level.INFO,"+++++++");
+		while(pass){
+			if(Thread.currentThread().isInterrupted()) {pass = false; continue;}
+
+			Thread.currentThread().setName("WebsocketReceiveThread" +USERID);
+			logger.log(Level.INFO,"begin 线程");
+			try {
+				if( socket == null ) {
+					socket = new Socket( proxy );
+				} else if( socket.isClosed() ) {
+					throw new IOException();
+				}
+				if( !socket.isBound() )
+					socket.connect( new InetSocketAddress( uri.getHost(), getPort() ), connectTimeout );
+				istream = socket.getInputStream();
+				ostream = socket.getOutputStream();
+
+				sendHandshake();
+			} catch ( /*IOException | SecurityException | UnresolvedAddressException | InvalidHandshakeException | ClosedByInterruptException | SocketTimeoutException */Exception e ) {
+				onWebsocketError( engine, e );
+				engine.closeConnection( CloseFrame.NEVER_CONNECTED, e.getMessage() );
+				return;
+			}
+
+			writeThread = new Thread( new WebsocketWriteThread() );
+			writeThread.setDaemon(true);
+			writeThread.start();
+			
+			byte[] rawbuffer = new byte[ WebSocketImpl.RCVBUF ];
+			int readBytes;
+
+			try {
+				// wurunzhou comment at 20150611 for 接收通道字节流，准备将其转为协议对象 
+				while ( !isClosed() && ( readBytes = istream.read( rawbuffer ) ) != -1&&(!Thread.currentThread().isInterrupted()) ) {
+					// 不断读取服务器消息
+					engine.decode( ByteBuffer.wrap( rawbuffer, 0, readBytes ) );
+					//logger.log(Level.INFO,"-");
+				}
+				engine.eot();
+			} catch ( IOException e ) {
+				engine.eot();
+				logger.log(Level.SEVERE,"--异常"+e.toString());
+			} catch ( RuntimeException e ) {
+				// this catch case covers internal errors only and indicates a bug in this websocket implementation
+				onError( e );
+				engine.closeConnection( CloseFrame.ABNORMAL_CLOSE, e.getMessage() );
+				logger.log(Level.SEVERE,"----异常"+e.toString());
+			}
+			assert ( socket.isClosed() );
+			logger.log(Level.WARNING,"4444444-websocketClient");
+		
+			
+			
+		}
+	
+	
 	}
 	private int getPort() {
 		int port = uri.getPort();
@@ -406,9 +412,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		
 		logger.log(Level.INFO,"收到心跳应答，onWebsocketPong at"+dateString.format(currentTime));
 		//lock.lock();
-		pongNeartTime = new Date();
-		//lock.unlock();
-		pingTimes.set(0);
+
 	}
 
 	@Override
@@ -460,106 +464,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	public void onFragment( Framedata frame ) {
 	}
 
-	/**
-	 * 该线程负责管理四个线程
-	 * 分别是：
-	 * 写消息
-	 * 读消息
-	 * 写心跳
-	 * 读心跳
-	 * @author wusir
-	 *
-	 */
-	private class MainReceiveThread implements Runnable{
 
-		public MainReceiveThread(){
-			//logger.log(Level.INFO,"++=");
-		}
-		@Override
-		public void run() {
-			//Thread.currentThread().setName("workreceiveThread");
-			boolean  pass = true;
-			//logger.log(Level.INFO,"+++++++");
-			while(pass){
-				if(Thread.currentThread().isInterrupted()) {pass = false; continue;}
-
-				Thread.currentThread().setName("WebsocketReceiveThread" +USERID);
-				logger.log(Level.INFO,"begin 线程");
-				try {
-					//logger.log(Level.INFO,"111111111");
-					if( socket == null ) {
-						socket = new Socket( proxy );
-						//socket.setKeepAlive(true);
-						//socket.setSoTimeout(30*1000);
-						logger.log(Level.INFO,"2222");
-					} else if( socket.isClosed() ) {
-						throw new IOException();
-					}
-					if( !socket.isBound() )
-						socket.connect( new InetSocketAddress( uri.getHost(), getPort() ), connectTimeout );
-					istream = socket.getInputStream();
-					ostream = socket.getOutputStream();
-
-				//	logger.log(Level.INFO,"33333333");
-					sendHandshake();
-				} catch ( /*IOException | SecurityException | UnresolvedAddressException | InvalidHandshakeException | ClosedByInterruptException | SocketTimeoutException */Exception e ) {
-					onWebsocketError( engine, e );
-					engine.closeConnection( CloseFrame.NEVER_CONNECTED, e.getMessage() );
-					return;
-				}
-
-
-				
-				
-				if(heartbeat){
-					writeThread = new Thread( new WebsocketWriteThread() );
-					writeThread.setDaemon(true);
-					writeThread.start();
-					
-					// wurunzhou add at 20150611 for start heartbeat thread
-					writeThread = new Thread(new HeartbeatSendThread());
-					writeThread.setDaemon(true);
-					writeThread.start();
-					// wurunzhou add at 20150611 for start heartbeat pong receive thread
-					writeThread = new Thread(new HeartbeatReceiveThread());
-					writeThread.setDaemon(true);
-					writeThread.start();
-					// wurunzhou add at 20150612 end	
-				}else{
-					writeThread = new Thread( new WebsocketWriteThread() );
-					writeThread.start();
-				}
-
-				
-				byte[] rawbuffer = new byte[ WebSocketImpl.RCVBUF ];
-				int readBytes;
-
-				try {
-					// wurunzhou comment at 20150611 for 接收通道字节流，准备将其转为协议对象 
-					while ( !isClosed() && ( readBytes = istream.read( rawbuffer ) ) != -1&&(!Thread.currentThread().isInterrupted()) ) {
-						// 不断读取服务器消息
-						engine.decode( ByteBuffer.wrap( rawbuffer, 0, readBytes ) );
-						//logger.log(Level.INFO,"-");
-					}
-					engine.eot();
-				} catch ( IOException e ) {
-					engine.eot();
-					logger.log(Level.SEVERE,"--异常"+e.toString());
-				} catch ( RuntimeException e ) {
-					// this catch case covers internal errors only and indicates a bug in this websocket implementation
-					onError( e );
-					engine.closeConnection( CloseFrame.ABNORMAL_CLOSE, e.getMessage() );
-					logger.log(Level.SEVERE,"----异常"+e.toString());
-				}
-				assert ( socket.isClosed() );
-				logger.log(Level.WARNING,"4444444-websocketClient");
-			
-				
-				
-			}
-		}
-		
-	}
 
 	/**
 	 * 写线程
@@ -591,176 +496,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		}
 		
 	}
-	/**
-	 * recevie 接受心跳应答控制
-	 * @author wusir
-	 *
-	 */
-	private class HeartbeatReceiveThread implements Runnable{
-
-		@Override
-		public void run() {
-			
-			Thread.currentThread().setName( "HeartbeatReceiveThread"+getTime() );
-			boolean pass = true;
-			
-			while(pass){
-				
-				try {
-					TimeUnit.SECONDS.sleep(120);
-				} catch (InterruptedException e) {
-					pass = false;
-				}
-				// 休眠2分钟 判断 最近一次接收pong应答的时间与当前时间差
-				Date currentTime = new Date();
-				int devision = (int) (currentTime.getTime() - pongNeartTime
-						.getTime()) / 1000;
-				// 如果当前时间和上次接受pong应答时间
-				if(devision < Integer.parseInt(WebsocketConstant.HeartbeatPongCycle.getParameter())){
-					// 小于 定义的 抛出异常上限时间 继续休眠等待
-				}else{
-					// 否则 抛出异常，结束线程。
-					PongExceptionTrue.addAndGet(1);
-					pass = false;
-				}
-			}
-			
-			logger.log(Level.WARNING,"4444444444HeartbeatReceiveThread");
-		}
-		
-	}
-	
-	
-	/**
-	 * 周期发送心跳线程
-	 * @author wurunzhou
-	 *
-	 */
-	private class HeartbeatSendThread implements Runnable{
-
-		public HeartbeatSendThread(){
-			// wurunzhou add code at 20150611 for init hearbeat premeter begin
-			pingNeartTime = new Date();
-			pongNeartTime = pingNeartTime;
-			// wurunzhou add code at 20150611 for init hearbeat premeter end
-		}
-		@Override
-		public void run() {
-			
-			Thread.currentThread().setName( "HeartbeatSendThread"+getTime() );
-			try {
-				TimeUnit.SECONDS.sleep(5);
-			} catch (InterruptedException e1) {
-
-			}
-			logger.log(Level.INFO,"启动heartbeat send Thread ");
-			boolean pass = true;
-			if(!heartbeat){
-				// 在这里waite
-				// object.w
-				return ;
-			}
-			logger.log(Level.INFO,"开始发送心跳");
-			int checkExceptionTimes = 0;
-			while(pass){
-				try {
-					
-					// 获得当前时间
-					Date currentTime = new Date();
-					// 当前时间和最近一次发送心跳时间比较
-					int devision = (int) (currentTime.getTime() - pingNeartTime
-							.getTime()) / 1000;
-					// 是否满足发送周期 否则休眠五秒
-					if (devision < Integer.parseInt(WebsocketConstant.HearbeatCycle
-							.getParameter())) {
-						// 休眠5秒
-						TimeUnit.SECONDS.sleep(Integer
-								.parseInt(WebsocketConstant.SleepTime
-										.getParameter()));
-					} else {
-
-						// 将心跳添加到发送队列
-						if (engine.sendPing() == 1) {
-							// 发送队列为空，插入心跳成功
-
-							// 更新ping发送时间,ping次数+1
-							pingNeartTime = new Date();
-							// ping 次数是否超过10次
-							if (pingTimes.getAndIncrement() < Integer
-									.parseInt(WebsocketConstant.PingConfine
-											.getParameter())) {
-								// 没有超过十次
-								
-							} else {
-								// 超过十次
-								if(checkException()){
-									// 有异常
-									pass = false;
-								}else{
-									// 无异常，再发一次看一看
-									if(checkExceptionTimes ++ > 10) pass = false;
-								}
-							}
-
-						} else {
-							// 发送队列不为空
-							// 休眠五秒
-							TimeUnit.SECONDS.sleep(Integer
-									.parseInt(WebsocketConstant.SleepTime
-											.getParameter()));
-						}
-					}
-				}catch(InterruptedException e){
-					logger.log(Level.INFO,"休眠5秒过程出现异常");
-					pass = false;
-				}
-				
-			}
-
-			// 心跳判断连接失效 不再发送ping 心跳
-			// 启动重连
-
-			//onWebsocketError(conn,);
-			closeConnect_(new WebsocketPongResponseException(), "心跳机制判断连接失效");
-			logger.log(Level.WARNING,"444444444HeartbeatSendThread");
-		}
-		
-	}
-	
-
-	/**
-	 * 
-	 * @param e1
-	 * @param info
-	 */
-	private void closeConnect_(Exception e1,String info){
-//		close();
-////		close();
-//		if(writeThread.isAlive())
-//			writeThread.interrupt();
-		try {
-			if( socket != null ){
-				socket.close();
-				logger.log(Level.SEVERE,"关闭socket");
-			}
-		} catch ( IOException e ) {
-			onWebsocketError( this, e );
-		}
-		notifyAll();
-//		writeThread  = null;
-//		socket = null;
-	//	logger.log(Level.INFO,"1111111-----------------------");
-		synchronized (this) {
-			beatpass = false;	
-		}
-		
-		//logger.log(Level.INFO,"22222222222-----------------------");
-		onError(e1);
-		//closeConnection(2002, info);
-		//onWebsocketClose(this,2002,info,true);
-
-
-	}
 
 	public void setProxy( Proxy proxy ) {
 		if( proxy == null )
@@ -768,19 +503,6 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		this.proxy = proxy;
 	}
 
-	/**
-	 * 判断接受心跳应答是否有异常
-	 * @return 为真表示有异常，否则表示没有异常。
-	 */
-	public boolean  checkException() {
-		// 如果还是为0 表示没有异常
-		if(PongExceptionTrue.get() == 0){
-			return false;	
-		}else{
-			// 否则表示有接收应答异常
-		}
-		return true;
-	}
 
 	/**
 	 * Accepts bound and unbound sockets.<br>

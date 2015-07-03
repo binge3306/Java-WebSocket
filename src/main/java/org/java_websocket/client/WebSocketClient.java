@@ -32,6 +32,7 @@ import org.java_websocket.framing.Framedata.Opcode;
 import org.java_websocket.handshake.HandshakeImpl1Client;
 import org.java_websocket.handshake.Handshakedata;
 import org.java_websocket.handshake.ServerHandshake;
+import org.java_websocket.util.TimeQueue;
 import org.java_websocket.util.logger.LoggerUtil;
 
 /**
@@ -82,6 +83,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	 * 为了确认消息收发时间，来确认消息系统的效率。
 	 */
 	private BlockingQueue<Date> outQueueTime;
+	
+	//收到回复 才会放闸 让你计算 延时时间。
+	private TimeQueue timequeue;
 	// wurunzhou  add parameter  save sendTime  end 
 
 	/** This open a websocket connection as specified by rfc6455 */
@@ -94,6 +98,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		this( serverURI, new Draft_17() );
 		this.USERID = userid;
 		outQueueTime = new LinkedBlockingQueue<Date>();
+		timequeue = new TimeQueue();
 	}
 
 	/**
@@ -256,6 +261,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			writeThread.setDaemon(true);
 			writeThread.start();
 			
+			writeThread = new Thread(new DelayDealThread());
+			writeThread.setDaemon(true);
+			writeThread.start();
 			byte[] rawbuffer = new byte[ WebSocketImpl.RCVBUF ];
 			int readBytes;
 
@@ -337,17 +345,7 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 	@Override
 	public final void onWebsocketMessage( WebSocket conn, String message ) {
 		if("msg__OK".equals(message)){
-			try {
-				if(outQueueTime.size() > 60)
-					onError(new InvalidDataException(ExceptionErrorCode.OutQueTimeOverFlow.getErrorCode()));
-				Date date1 = outQueueTime.take();
-				Date current = new Date();
-				long times = current.getTime()-date1.getTime();
-				logger.log(Level.INFO,Thread.currentThread().getName()+" 消息延时时间 "+times  +" (毫秒)");
-			} catch (InterruptedException e) {
-
-				logger.log(Level.SEVERE,"处理确认消息发送成功，发生异常" + e.toString());
-			}
+			timequeue.put(new Date());
 			
 		}else{
 			onMessage( message );
@@ -414,7 +412,8 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 
 	@Override
 	public final void onWriteDemand( WebSocket conn ) {
-		// nothing to do
+		// 待发送消息已经放到发送队列中了
+		
 	}
 
 	@Override
@@ -491,6 +490,33 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				logger.log(Level.SEVERE,"websocketWriteThread be interrupted");
 			}
 			logger.log(Level.WARNING,"44444444444wesocketWriteThread");
+		}
+		
+	}
+	
+	private class DelayDealThread implements Runnable{
+
+		@Override
+		public void run() {
+			Thread.currentThread().setName( "DelayDealThread"+USERID);
+			boolean pass = true;
+			while ( !Thread.interrupted()&&pass ) {
+
+				Date current  = timequeue.get();
+				try {
+
+					if(outQueueTime.size() > 60)
+						onError(new InvalidDataException(ExceptionErrorCode.OutQueTimeOverFlow.getErrorCode()));
+					Date date1 = outQueueTime.take();
+					
+					long times = current.getTime()-date1.getTime();
+					logger.log(Level.INFO,Thread.currentThread().getName()+" 消息延时时间 "+times  +" (毫秒)");
+				} catch (InterruptedException e) {
+
+					logger.log(Level.SEVERE,"处理确认消息发送成功，发生异常" + e.toString());
+					pass = false;
+				}
+			}
 		}
 		
 	}

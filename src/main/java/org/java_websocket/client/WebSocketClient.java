@@ -505,6 +505,9 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 				Date current  = timequeue.get();
 				try {
 
+					if(outQueueTime.isEmpty()){
+						continue;
+					}
 					if(outQueueTime.size() > 60)
 						onError(new InvalidDataException(ExceptionErrorCode.OutQueTimeOverFlow.getErrorCode()));
 					Date date1 = outQueueTime.take();

@@ -36,8 +36,8 @@ import org.java_websocket.handshake.ClientHandshakeBuilder;
 import org.java_websocket.handshake.Handshakedata;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.handshake.ServerHandshakeBuilder;
-import org.java_websocket.server.WebSocketServer.WebSocketWorker;
 import org.java_websocket.util.Charsetfunctions;
+import org.java_websocket.util.SendByteQueue;
 import org.java_websocket.util.logger.LoggerUtil;
 
 /**
@@ -72,17 +72,18 @@ public class WebSocketImpl implements WebSocket {
 	/**
 	 * Queue of buffers that need to be sent to the client.
 	 */
-	public final BlockingQueue<ByteBuffer> outQueue;
+	//public final BlockingQueue<ByteBuffer> outQueue;
 
+	public SendByteQueue outQueue;
 	/**
 	 * Queue of buffers that need to be processed
 	 */
-	public final BlockingQueue<ByteBuffer> inQueue;
+	//public final BlockingQueue<ByteBuffer> inQueue;
 
 	/**
 	 * Helper variable meant to store the thread which ( exclusively ) triggers this objects decode method.
 	 **/
-	public volatile WebSocketWorker workerThread; // TODO reset worker?
+	public volatile Thread workerThread; // TODO reset worker?
 
 	/** When true no further frames may be submitted to be sent */
 	private volatile boolean flushandclosestate = false;
@@ -137,9 +138,9 @@ public class WebSocketImpl implements WebSocket {
 	public WebSocketImpl( WebSocketListener listener , Draft draft ) {
 		if( listener == null || ( draft == null && role == Role.SERVER ) )// socket can be null because we want do be able to create the object without already having a bound channel
 			throw new IllegalArgumentException( "parameters must not be null" );
-		this.outQueue = new LinkedBlockingQueue<ByteBuffer>();
+		this.outQueue = new SendByteQueue();//new LinkedBlockingQueue<ByteBuffer>();
 
-		inQueue = new LinkedBlockingQueue<ByteBuffer>();
+		//inQueue = new LinkedBlockingQueue<ByteBuffer>();
 		this.wsl = listener;
 		this.role = Role.CLIENT;
 		if( draft != null )
@@ -489,7 +490,7 @@ public class WebSocketImpl implements WebSocket {
 		handshakerequest = null;
 
 		readystate = READYSTATE.CLOSED;
-		this.outQueue.clear();
+		this.outQueue = null;
 		
 	}
 
@@ -582,26 +583,26 @@ public class WebSocketImpl implements WebSocket {
 	}
 
 	// wurunzhou add at 20150608 for heartbeat begin
-	/**
-	 * 
-	 * @return 1 表示心跳添加成功，0表示发送队列不为空
-	 */
-	public int sendPing() {
-		if(outQueue.isEmpty()||outQueue.size()<=0){
-			// 发送队列为空 将心跳添加到发送队列
-			send(draft.createPingFrames(ByteBuffer.wrap("ping".getBytes())));
-			return 1;
-		}else{
-			// 提醒线程休眠五秒
-			return 0;
-		}
-		
-	}
+//	/**
+//	 * 
+//	 * @return 1 表示心跳添加成功，0表示发送队列不为空
+//	 */
+//	public int sendPing() {
+//		if(outQueue.isEmpty()||outQueue.size()<=0){
+//			// 发送队列为空 将心跳添加到发送队列
+//			send(draft.createPingFrames(ByteBuffer.wrap("ping".getBytes())));
+//			return 1;
+//		}else{
+//			// 提醒线程休眠五秒
+//			return 0;
+//		}
+//		
+//	}
 
 
-	public void sendPong() {
-		
-	}
+//	public void sendPong() {
+//		
+//	}
 	// wurunzhou add at 20150608 for heartbeat end 
 	
 	@Override
@@ -630,10 +631,11 @@ public class WebSocketImpl implements WebSocket {
 		write( draft.createBinaryFrame( framedata ) );
 	}
 
-	@Override
-	public boolean hasBufferedData() {
-		return !this.outQueue.isEmpty();
-	}
+//	@Override
+//	public boolean hasBufferedData() {
+//		//return !this.outQueue.isEmpty();
+//		return true;
+//	}
 
 	private HandshakeState isFlashEdgeCase( ByteBuffer request ) throws IncompleteHandshakeException {
 		request.mark();
@@ -681,8 +683,10 @@ public class WebSocketImpl implements WebSocket {
 		if( DEBUG )
 			logger.log(Level.INFO, "write(" + buf.remaining() + "): {" + ( buf.remaining() > 1000 ? "too big to display" : new String( buf.array() ) ) + "}" );
 
-		outQueue.add( buf );
+//		outQueue.add( buf );
 
+		outQueue.put(buf);
+		
 		/*try {
 			outQueue.put( buf );
 		} catch ( InterruptedException e ) {

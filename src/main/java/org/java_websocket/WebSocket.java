@@ -79,7 +79,8 @@ public interface WebSocket {
 	 **/
 	public abstract void sendFragmentedFrame( Opcode op, ByteBuffer buffer, boolean fin );
 
-	public abstract boolean hasBufferedData();
+	// wurunzhou comment at 20150606 for blockingQueue change SendByteQueue
+	//public abstract boolean hasBufferedData();
 
 	/**
 	 * @returns never returns null

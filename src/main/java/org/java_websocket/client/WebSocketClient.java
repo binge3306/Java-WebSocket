@@ -478,16 +478,13 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 			Thread.currentThread().setName( "WebsocketWriteThread"+USERID);
 			try {
 				while ( !Thread.interrupted() ) {
-					ByteBuffer buffer = engine.outQueue.take();
+					ByteBuffer buffer = engine.outQueue.get();
 					ostream.write( buffer.array(), 0, buffer.limit() );
 					ostream.flush();
 					outQueueTime.add(new Date());
 				}
 			} catch ( IOException e ) {
 				engine.eot();
-			} catch ( InterruptedException e ) {
-				// this thread is regularly terminated via an interrupt
-				logger.log(Level.SEVERE,"websocketWriteThread be interrupted");
 			}
 			logger.log(Level.WARNING,"44444444444wesocketWriteThread");
 		}
@@ -574,10 +571,10 @@ public abstract class WebSocketClient extends WebSocketAdapter implements Runnab
 		return engine.isConnecting();
 	}
 
-	@Override
-	public boolean hasBufferedData() {
-		return engine.hasBufferedData();
-	}
+//	@Override
+//	public boolean hasBufferedData() {
+//		return engine.hasBufferedData();
+//	}
 
 	@Override
 	public void close( int code ) {
